@@ -1,0 +1,7 @@
+/app/build/./install_dir/lib/libcore_utils.a
+/app/build/./install_dir/include/CoreUtils/pack_bcd.h
+/app/build/./install_dir/include/CoreUtils/checksum.h
+/app/build/./install_dir/include/CoreUtils/string_utils.h
+/app/build/./install_dir/include/CoreUtils/logger.h
+/app/build/./install_dir/include/CoreUtils/error_codes.h
+/app/build/./install_dir/include/CoreUtils/common_header.h

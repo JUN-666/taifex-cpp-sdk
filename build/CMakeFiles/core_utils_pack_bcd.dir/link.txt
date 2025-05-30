@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcore_utils_pack_bcd.a CMakeFiles/core_utils_pack_bcd.dir/pack_bcd.cpp.o
+/usr/bin/ranlib libcore_utils_pack_bcd.a
