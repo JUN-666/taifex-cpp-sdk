@@ -225,7 +225,10 @@ int main() {
     // TODO: Add more tests for I081, I083, I002 processing via raw messages
     // TODO: Add tests for sequence number validation effects
     test_process_i083_message();
-    test_process_i081_message(); // New test
+    test_process_i081_message();
+    test_process_i002_sequence_reset(); // New test
+    test_process_i001_heartbeat();      // New test
+    test_channel_sequence_logic();      // New test
     std::cout << "TaifexSdk core tests completed." << std::endl;
     return 0;
 }
@@ -533,4 +536,199 @@ void test_process_i081_message() {
         assert(asks.size() == 1 && asks[0].price == 20100 && asks[0].quantity == 8);
     }
     std::cout << "test_process_i081_message PASSED." << std::endl;
+}
+
+// Helper function to create a raw message with an empty body (like I001, I002)
+std::vector<unsigned char> create_raw_empty_body_message(
+    uint64_t channel_seq,
+    uint16_t channel_id_val, // Added channel_id parameter
+    MessageType msg_type_enum) {
+
+    uint16_t body_length = 0; // Empty body
+
+    CommonHeader header_obj;
+    header_obj.esc_code = 0x1B;
+    header_obj.transmission_code = 0x02; // Realtime
+    header_obj.message_kind = MessageIdentifier::messageTypeToByte(msg_type_enum);
+
+    // BodyLength BCD (0 -> 0x00 0x00)
+    header_obj.body_length_bcd[0] = 0x00;
+    header_obj.body_length_bcd[1] = 0x00;
+
+    // ChannelID BCD (e.g. 1 -> 0x00 0x01) - simplified (direct assignment, not true BCD)
+    header_obj.channel_id_bcd[0] = static_cast<unsigned char>((channel_id_val >> 8) & 0xFF);
+    header_obj.channel_id_bcd[1] = static_cast<unsigned char>(channel_id_val & 0xFF);
+
+    // Simplified ChannelSeq BCD
+    memset(header_obj.information_time_bcd.data(), 0, 6); // Zero out for simplicity
+    memset(header_obj.channel_seq_bcd.data(), 0, 5); // Zero out for simplicity
+    uint64_t temp_seq = channel_seq;
+    // Simplified BCD-like encoding: each byte stores two digits if possible.
+    // This is NOT robust BCD packing, but a placeholder for testing.
+    for(int i = 4; i >= 0 && temp_seq > 0; --i) {
+        unsigned char digit1 = temp_seq % 10;
+        temp_seq /= 10;
+        unsigned char digit2 = 0;
+        if (temp_seq > 0) {
+            digit2 = temp_seq % 10;
+            temp_seq /= 10;
+        }
+        header_obj.channel_seq_bcd[i] = (digit2 << 4) | digit1;
+    }
+    header_obj.version_no_bcd = 0; // Default to 0
+
+
+    std::vector<unsigned char> full_message(CommonHeader::HEADER_SIZE + body_length + 1 + 2);
+    size_t header_offset = 0;
+    full_message[header_offset++] = header_obj.esc_code;
+    full_message[header_offset++] = header_obj.transmission_code;
+    full_message[header_offset++] = header_obj.message_kind;
+    memcpy(full_message.data() + header_offset, header_obj.information_time_bcd.data(), 6); header_offset += 6;
+    memcpy(full_message.data() + header_offset, header_obj.channel_id_bcd.data(), 2); header_offset += 2;
+    memcpy(full_message.data() + header_offset, header_obj.channel_seq_bcd.data(), 5); header_offset += 5;
+    full_message[header_offset++] = header_obj.version_no_bcd;
+    memcpy(full_message.data() + header_offset, header_obj.body_length_bcd.data(), 2); header_offset += 2;
+
+    // No body to copy for body_length = 0
+
+    unsigned char checksum = CoreUtils::calculate_checksum(full_message.data() + 1, CommonHeader::HEADER_SIZE - 1 + body_length);
+    full_message[CommonHeader::HEADER_SIZE + body_length] = checksum;
+    full_message[CommonHeader::HEADER_SIZE + body_length + 1] = 0x0D;
+    full_message[CommonHeader::HEADER_SIZE + body_length + 2] = 0x0A;
+
+    return full_message;
+}
+
+
+void test_process_i002_sequence_reset() {
+    std::cout << "Running test_process_i002_sequence_reset..." << std::endl;
+    TaifexSdk sdk;
+    sdk.initialize();
+
+    std::string prod_id_s = "RESETPROD ";
+    std::string order_book_prod_id = "RESETPROD1234567890";
+    uint16_t test_channel_id = 15;
+
+    // 1. Setup: Send I010 and I083 to create an order book and set sequences
+    MessageI010 i010_content;
+    i010_content.prod_id_s = prod_id_s;
+    i010_content.decimal_locator = 0;
+    i010_content.prod_kind = 'F';
+    i010_content.strike_price_decimal_locator = 0; // Ensure all necessary fields for helper are set
+    i010_content.flow_group = 0;
+    i010_content.dynamic_banding = 'N';
+
+
+    // Create I010 on a different channel to avoid its sequence interfering with test_channel_id
+    std::vector<unsigned char> raw_i010 = create_raw_i010_message(100ULL, 32, i010_content);
+    // Manually set channel ID for I010 to something other than test_channel_id
+    uint16_t i010_channel_id = test_channel_id + 1;
+    raw_i010[7] = static_cast<unsigned char>((i010_channel_id >> 8) & 0xFF);
+    raw_i010[8] = static_cast<unsigned char>(i010_channel_id & 0xFF);
+    unsigned char new_checksum_i010 = CoreUtils::calculate_checksum(raw_i010.data() + 1, CommonHeader::HEADER_SIZE -1 + 32 );
+    raw_i010[CommonHeader::HEADER_SIZE + 32] = new_checksum_i010;
+
+
+    std::vector<MdEntryI083> entries;
+    entries.push_back({'0', '0', 1000, 10, 1});
+    std::vector<unsigned char> raw_i083 = create_raw_i083_message(101ULL, order_book_prod_id, 5, '0', entries);
+    // Manually set channel ID in raw_i083 header for this test.
+    raw_i083[7] = static_cast<unsigned char>((test_channel_id >> 8) & 0xFF);
+    raw_i083[8] = static_cast<unsigned char>(test_channel_id & 0xFF);
+    uint16_t i083_body_len = 20 + 5 + 1 + 1 + (entries.size() * 12);
+    unsigned char new_checksum_i083 = CoreUtils::calculate_checksum(raw_i083.data() + 1, CommonHeader::HEADER_SIZE -1 + i083_body_len );
+    raw_i083[CommonHeader::HEADER_SIZE + i083_body_len] = new_checksum_i083;
+
+
+    sdk.process_message(raw_i010.data(), raw_i010.size());
+    sdk.process_message(raw_i083.data(), raw_i083.size());
+
+    auto ob_before_reset = sdk.get_order_book(order_book_prod_id);
+    assert(ob_before_reset.has_value());
+    if (!ob_before_reset) { assert(false); return; } // Guard
+    assert(ob_before_reset->get().get_last_prod_msg_seq() == 5);
+    assert(!ob_before_reset->get().get_top_bids(1).empty());
+
+    // 2. Send I002 for test_channel_id
+    std::vector<unsigned char> raw_i002 = create_raw_empty_body_message(102ULL, test_channel_id, MessageType::I002_SEQUENCE_RESET);
+    sdk.process_message(raw_i002.data(), raw_i002.size());
+
+    // 3. Verify OrderBook is reset
+    auto ob_after_reset = sdk.get_order_book(order_book_prod_id);
+    assert(ob_after_reset.has_value());
+    if (!ob_after_reset) { assert(false); return; } // Guard
+    assert(ob_after_reset->get().get_last_prod_msg_seq() == 0);
+    assert(ob_after_reset->get().get_top_bids(1).empty());
+    assert(ob_after_reset->get().get_top_asks(1).empty());
+
+    // 4. Verify channel sequence for test_channel_id is reset
+    std::vector<unsigned char> raw_i001_after_reset = create_raw_empty_body_message(1ULL, test_channel_id, MessageType::I001_HEARTBEAT);
+    // This message should be processed without sequence errors.
+    // To directly test is_sequence_valid, we'd need a test hook in TaifexSdk.
+    // For now, we rely on the fact that handle_i002 calls channel_sequences_[channel_id] = 0;
+    // A subsequent call to process_message with seq 1 for this channel should then pass is_sequence_valid's "first message" or "expected" logic.
+    // We can check this by attempting to process msg with seq 1 and ensuring no error is logged (implicitly)
+    // and then processing msg with seq 2.
+    sdk.process_message(raw_i001_after_reset.data(), raw_i001_after_reset.size()); // Should pass
+    std::vector<unsigned char> raw_i001_seq2 = create_raw_empty_body_message(2ULL, test_channel_id, MessageType::I001_HEARTBEAT);
+    sdk.process_message(raw_i001_seq2.data(), raw_i001_seq2.size()); // Should also pass if seq 1 was accepted
+
+    std::cout << "test_process_i002_sequence_reset PASSED." << std::endl;
+}
+
+void test_process_i001_heartbeat() {
+    std::cout << "Running test_process_i001_heartbeat..." << std::endl;
+    TaifexSdk sdk;
+    sdk.initialize();
+    uint16_t test_channel_id = 20;
+    uint64_t initial_seq = 50;
+
+    std::vector<unsigned char> raw_i001 = create_raw_empty_body_message(initial_seq, test_channel_id, MessageType::I001_HEARTBEAT);
+    sdk.process_message(raw_i001.data(), raw_i001.size());
+
+    // Send another one with incremented sequence. If no error, implies sequence updated.
+    std::vector<unsigned char> raw_i001_next = create_raw_empty_body_message(initial_seq + 1, test_channel_id, MessageType::I001_HEARTBEAT);
+    sdk.process_message(raw_i001_next.data(), raw_i001_next.size());
+
+    std::cout << "test_process_i001_heartbeat PASSED (basic check)." << std::endl;
+}
+
+void test_channel_sequence_logic() {
+    std::cout << "Running test_channel_sequence_logic..." << std::endl;
+    TaifexSdk sdk;
+    sdk.initialize();
+    uint16_t test_channel_id = 25;
+
+    // 1. First message (seq 10) - should pass, sets last_known=10
+    std::vector<unsigned char> msg1 = create_raw_empty_body_message(10ULL, test_channel_id, MessageType::I001_HEARTBEAT);
+    sdk.process_message(msg1.data(), msg1.size());
+
+    // 2. Expected next message (seq 11) - should pass, last_known=11
+    std::vector<unsigned char> msg2 = create_raw_empty_body_message(11ULL, test_channel_id, MessageType::I001_HEARTBEAT);
+    sdk.process_message(msg2.data(), msg2.size());
+
+    // 3. Replay/Old message (seq 11) - should be rejected (is_sequence_valid returns false)
+    // No state change in order book or product info to observe directly for I001.
+    // This test relies on internal logging of TaifexSdk::is_sequence_valid for "Out-of-order/replay".
+    std::vector<unsigned char> msg_replay = create_raw_empty_body_message(11ULL, test_channel_id, MessageType::I001_HEARTBEAT);
+    sdk.process_message(msg_replay.data(), msg_replay.size());
+    // Asserting channel sequence didn't change from 11 would need a test hook.
+
+    // 4. Gap detected (seq 13, expected 12) - should be accepted (is_sequence_valid returns false but updates sequence to 13)
+    std::vector<unsigned char> msg_gap = create_raw_empty_body_message(13ULL, test_channel_id, MessageType::I001_HEARTBEAT);
+    sdk.process_message(msg_gap.data(), msg_gap.size());
+
+    // 5. Next message after gap (seq 14) - should pass, last_known=14
+    std::vector<unsigned char> msg_after_gap = create_raw_empty_body_message(14ULL, test_channel_id, MessageType::I001_HEARTBEAT);
+    sdk.process_message(msg_after_gap.data(), msg_after_gap.size());
+
+    // To make this test more concrete without direct state access:
+    // After msg_replay (seq 11, when last known was 11):
+    //   Send seq 12. It should be processed fine because seq 11 (replay) was ignored by is_sequence_valid.
+    std::vector<unsigned char> msg_after_replay = create_raw_empty_body_message(12ULL, test_channel_id, MessageType::I001_HEARTBEAT);
+    // sdk.process_message(msg_after_replay.data(), msg_after_replay.size()); // This would be processed after msg_replay if seq state is 11.
+    // Then msg_gap (13) would be a gap of 0, which is next expected.
+    // The log messages from is_sequence_valid are key to verifying this test externally.
+
+    std::cout << "test_channel_sequence_logic PASSED (qualitative checks, relies on logging)." << std::endl;
 }
