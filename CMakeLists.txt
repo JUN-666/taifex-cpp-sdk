@@ -14,6 +14,8 @@ add_library(core_utils # Type (STATIC/SHARED) determined by BUILD_SHARED_LIBS de
     checksum.cpp
     string_utils.cpp
     logger.cpp
+    common_header.cpp
+    message_identifier.cpp # <-- Add this line
     # error_codes.h is header-only, included by the .cpp files that need it
 )
 # Set properties for Windows shared library builds (DLL export/import)
@@ -81,6 +83,8 @@ add_core_utils_test(checksum_tester main_checksum_test.cpp)
 add_core_utils_test(string_utils_tester main_string_utils_test.cpp)
 add_core_utils_test(logger_tester main_logger_test.cpp)
 add_core_utils_test(error_codes_tester main_error_codes_test.cpp)
+add_core_utils_test(common_header_parser_tester main_common_header_parser_test.cpp)
+add_core_utils_test(message_identifier_tester main_message_identifier_test.cpp)
 
 # Enable testing with CTest
 enable_testing()

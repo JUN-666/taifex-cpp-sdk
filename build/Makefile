@@ -249,6 +249,32 @@ error_codes_tester/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/error_codes_tester.dir/build.make CMakeFiles/error_codes_tester.dir/build
 .PHONY : error_codes_tester/fast
 
+#=============================================================================
+# Target rules for targets named common_header_parser_tester
+
+# Build rule for target.
+common_header_parser_tester: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 common_header_parser_tester
+.PHONY : common_header_parser_tester
+
+# fast build rule for target.
+common_header_parser_tester/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/common_header_parser_tester.dir/build.make CMakeFiles/common_header_parser_tester.dir/build
+.PHONY : common_header_parser_tester/fast
+
+#=============================================================================
+# Target rules for targets named message_identifier_tester
+
+# Build rule for target.
+message_identifier_tester: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 message_identifier_tester
+.PHONY : message_identifier_tester
+
+# fast build rule for target.
+message_identifier_tester/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/message_identifier_tester.dir/build.make CMakeFiles/message_identifier_tester.dir/build
+.PHONY : message_identifier_tester/fast
+
 checksum.o: checksum.cpp.o
 .PHONY : checksum.o
 
@@ -272,6 +298,30 @@ checksum.s: checksum.cpp.s
 checksum.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/checksum.cpp.s
 .PHONY : checksum.cpp.s
+
+common_header.o: common_header.cpp.o
+.PHONY : common_header.o
+
+# target to build an object file
+common_header.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/common_header.cpp.o
+.PHONY : common_header.cpp.o
+
+common_header.i: common_header.cpp.i
+.PHONY : common_header.i
+
+# target to preprocess a source file
+common_header.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/common_header.cpp.i
+.PHONY : common_header.cpp.i
+
+common_header.s: common_header.cpp.s
+.PHONY : common_header.s
+
+# target to generate assembly for a file
+common_header.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/common_header.cpp.s
+.PHONY : common_header.cpp.s
 
 logger.o: logger.cpp.o
 .PHONY : logger.o
@@ -321,6 +371,30 @@ main_checksum_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/checksum_tester.dir/build.make CMakeFiles/checksum_tester.dir/main_checksum_test.cpp.s
 .PHONY : main_checksum_test.cpp.s
 
+main_common_header_parser_test.o: main_common_header_parser_test.cpp.o
+.PHONY : main_common_header_parser_test.o
+
+# target to build an object file
+main_common_header_parser_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/common_header_parser_tester.dir/build.make CMakeFiles/common_header_parser_tester.dir/main_common_header_parser_test.cpp.o
+.PHONY : main_common_header_parser_test.cpp.o
+
+main_common_header_parser_test.i: main_common_header_parser_test.cpp.i
+.PHONY : main_common_header_parser_test.i
+
+# target to preprocess a source file
+main_common_header_parser_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/common_header_parser_tester.dir/build.make CMakeFiles/common_header_parser_tester.dir/main_common_header_parser_test.cpp.i
+.PHONY : main_common_header_parser_test.cpp.i
+
+main_common_header_parser_test.s: main_common_header_parser_test.cpp.s
+.PHONY : main_common_header_parser_test.s
+
+# target to generate assembly for a file
+main_common_header_parser_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/common_header_parser_tester.dir/build.make CMakeFiles/common_header_parser_tester.dir/main_common_header_parser_test.cpp.s
+.PHONY : main_common_header_parser_test.cpp.s
+
 main_error_codes_test.o: main_error_codes_test.cpp.o
 .PHONY : main_error_codes_test.o
 
@@ -369,6 +443,30 @@ main_logger_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger_tester.dir/build.make CMakeFiles/logger_tester.dir/main_logger_test.cpp.s
 .PHONY : main_logger_test.cpp.s
 
+main_message_identifier_test.o: main_message_identifier_test.cpp.o
+.PHONY : main_message_identifier_test.o
+
+# target to build an object file
+main_message_identifier_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/message_identifier_tester.dir/build.make CMakeFiles/message_identifier_tester.dir/main_message_identifier_test.cpp.o
+.PHONY : main_message_identifier_test.cpp.o
+
+main_message_identifier_test.i: main_message_identifier_test.cpp.i
+.PHONY : main_message_identifier_test.i
+
+# target to preprocess a source file
+main_message_identifier_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/message_identifier_tester.dir/build.make CMakeFiles/message_identifier_tester.dir/main_message_identifier_test.cpp.i
+.PHONY : main_message_identifier_test.cpp.i
+
+main_message_identifier_test.s: main_message_identifier_test.cpp.s
+.PHONY : main_message_identifier_test.s
+
+# target to generate assembly for a file
+main_message_identifier_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/message_identifier_tester.dir/build.make CMakeFiles/message_identifier_tester.dir/main_message_identifier_test.cpp.s
+.PHONY : main_message_identifier_test.cpp.s
+
 main_pack_bcd_test.o: main_pack_bcd_test.cpp.o
 .PHONY : main_pack_bcd_test.o
 
@@ -416,6 +514,30 @@ main_string_utils_test.s: main_string_utils_test.cpp.s
 main_string_utils_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/string_utils_tester.dir/build.make CMakeFiles/string_utils_tester.dir/main_string_utils_test.cpp.s
 .PHONY : main_string_utils_test.cpp.s
+
+message_identifier.o: message_identifier.cpp.o
+.PHONY : message_identifier.o
+
+# target to build an object file
+message_identifier.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/message_identifier.cpp.o
+.PHONY : message_identifier.cpp.o
+
+message_identifier.i: message_identifier.cpp.i
+.PHONY : message_identifier.i
+
+# target to preprocess a source file
+message_identifier.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/message_identifier.cpp.i
+.PHONY : message_identifier.cpp.i
+
+message_identifier.s: message_identifier.cpp.s
+.PHONY : message_identifier.s
+
+# target to generate assembly for a file
+message_identifier.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/message_identifier.cpp.s
+.PHONY : message_identifier.cpp.s
 
 pack_bcd.o: pack_bcd.cpp.o
 .PHONY : pack_bcd.o
@@ -479,32 +601,46 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... checksum_tester"
+	@echo "... common_header_parser_tester"
 	@echo "... core_utils"
 	@echo "... error_codes_tester"
 	@echo "... logger_tester"
+	@echo "... message_identifier_tester"
 	@echo "... pack_bcd_tester"
 	@echo "... string_utils_tester"
 	@echo "... checksum.o"
 	@echo "... checksum.i"
 	@echo "... checksum.s"
+	@echo "... common_header.o"
+	@echo "... common_header.i"
+	@echo "... common_header.s"
 	@echo "... logger.o"
 	@echo "... logger.i"
 	@echo "... logger.s"
 	@echo "... main_checksum_test.o"
 	@echo "... main_checksum_test.i"
 	@echo "... main_checksum_test.s"
+	@echo "... main_common_header_parser_test.o"
+	@echo "... main_common_header_parser_test.i"
+	@echo "... main_common_header_parser_test.s"
 	@echo "... main_error_codes_test.o"
 	@echo "... main_error_codes_test.i"
 	@echo "... main_error_codes_test.s"
 	@echo "... main_logger_test.o"
 	@echo "... main_logger_test.i"
 	@echo "... main_logger_test.s"
+	@echo "... main_message_identifier_test.o"
+	@echo "... main_message_identifier_test.i"
+	@echo "... main_message_identifier_test.s"
 	@echo "... main_pack_bcd_test.o"
 	@echo "... main_pack_bcd_test.i"
 	@echo "... main_pack_bcd_test.s"
 	@echo "... main_string_utils_test.o"
 	@echo "... main_string_utils_test.i"
 	@echo "... main_string_utils_test.s"
+	@echo "... message_identifier.o"
+	@echo "... message_identifier.i"
+	@echo "... message_identifier.s"
 	@echo "... pack_bcd.o"
 	@echo "... pack_bcd.i"
 	@echo "... pack_bcd.s"

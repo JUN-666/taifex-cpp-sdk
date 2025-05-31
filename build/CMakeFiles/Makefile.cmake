@@ -53,4 +53,6 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/string_utils_tester.dir/DependInfo.cmake"
   "CMakeFiles/logger_tester.dir/DependInfo.cmake"
   "CMakeFiles/error_codes_tester.dir/DependInfo.cmake"
+  "CMakeFiles/common_header_parser_tester.dir/DependInfo.cmake"
+  "CMakeFiles/message_identifier_tester.dir/DependInfo.cmake"
   )

@@ -1,2 +1,2 @@
-/usr/bin/ar qc libcore_utils.a CMakeFiles/core_utils.dir/pack_bcd.cpp.o CMakeFiles/core_utils.dir/checksum.cpp.o CMakeFiles/core_utils.dir/string_utils.cpp.o CMakeFiles/core_utils.dir/logger.cpp.o
+/usr/bin/ar qc libcore_utils.a CMakeFiles/core_utils.dir/pack_bcd.cpp.o CMakeFiles/core_utils.dir/checksum.cpp.o CMakeFiles/core_utils.dir/string_utils.cpp.o CMakeFiles/core_utils.dir/logger.cpp.o CMakeFiles/core_utils.dir/common_header.cpp.o CMakeFiles/core_utils.dir/message_identifier.cpp.o
 /usr/bin/ranlib libcore_utils.a

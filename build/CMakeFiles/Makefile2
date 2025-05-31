@@ -69,6 +69,8 @@ all: CMakeFiles/checksum_tester.dir/all
 all: CMakeFiles/string_utils_tester.dir/all
 all: CMakeFiles/logger_tester.dir/all
 all: CMakeFiles/error_codes_tester.dir/all
+all: CMakeFiles/common_header_parser_tester.dir/all
+all: CMakeFiles/message_identifier_tester.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -82,6 +84,8 @@ clean: CMakeFiles/checksum_tester.dir/clean
 clean: CMakeFiles/string_utils_tester.dir/clean
 clean: CMakeFiles/logger_tester.dir/clean
 clean: CMakeFiles/error_codes_tester.dir/clean
+clean: CMakeFiles/common_header_parser_tester.dir/clean
+clean: CMakeFiles/message_identifier_tester.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -91,12 +95,12 @@ clean: CMakeFiles/error_codes_tester.dir/clean
 CMakeFiles/core_utils.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=3,4,5,6,7 "Built target core_utils"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=5,6,7,8,9,10,11 "Built target core_utils"
 .PHONY : CMakeFiles/core_utils.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/core_utils.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/core_utils.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
 .PHONY : CMakeFiles/core_utils.dir/rule
@@ -117,12 +121,12 @@ CMakeFiles/core_utils.dir/clean:
 CMakeFiles/pack_bcd_tester.dir/all: CMakeFiles/core_utils.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pack_bcd_tester.dir/build.make CMakeFiles/pack_bcd_tester.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pack_bcd_tester.dir/build.make CMakeFiles/pack_bcd_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=12,13 "Built target pack_bcd_tester"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=18,19 "Built target pack_bcd_tester"
 .PHONY : CMakeFiles/pack_bcd_tester.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/pack_bcd_tester.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/pack_bcd_tester.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
 .PHONY : CMakeFiles/pack_bcd_tester.dir/rule
@@ -148,7 +152,7 @@ CMakeFiles/checksum_tester.dir/all: CMakeFiles/core_utils.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/checksum_tester.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/checksum_tester.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
 .PHONY : CMakeFiles/checksum_tester.dir/rule
@@ -169,12 +173,12 @@ CMakeFiles/checksum_tester.dir/clean:
 CMakeFiles/string_utils_tester.dir/all: CMakeFiles/core_utils.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/string_utils_tester.dir/build.make CMakeFiles/string_utils_tester.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/string_utils_tester.dir/build.make CMakeFiles/string_utils_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=14,15 "Built target string_utils_tester"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=20,21 "Built target string_utils_tester"
 .PHONY : CMakeFiles/string_utils_tester.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/string_utils_tester.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/string_utils_tester.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
 .PHONY : CMakeFiles/string_utils_tester.dir/rule
@@ -195,12 +199,12 @@ CMakeFiles/string_utils_tester.dir/clean:
 CMakeFiles/logger_tester.dir/all: CMakeFiles/core_utils.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger_tester.dir/build.make CMakeFiles/logger_tester.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger_tester.dir/build.make CMakeFiles/logger_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=10,11 "Built target logger_tester"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=14,15 "Built target logger_tester"
 .PHONY : CMakeFiles/logger_tester.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/logger_tester.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/logger_tester.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
 .PHONY : CMakeFiles/logger_tester.dir/rule
@@ -221,12 +225,12 @@ CMakeFiles/logger_tester.dir/clean:
 CMakeFiles/error_codes_tester.dir/all: CMakeFiles/core_utils.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/error_codes_tester.dir/build.make CMakeFiles/error_codes_tester.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/error_codes_tester.dir/build.make CMakeFiles/error_codes_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=8,9 "Built target error_codes_tester"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=12,13 "Built target error_codes_tester"
 .PHONY : CMakeFiles/error_codes_tester.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/error_codes_tester.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/error_codes_tester.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
 .PHONY : CMakeFiles/error_codes_tester.dir/rule
@@ -239,6 +243,58 @@ error_codes_tester: CMakeFiles/error_codes_tester.dir/rule
 CMakeFiles/error_codes_tester.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/error_codes_tester.dir/build.make CMakeFiles/error_codes_tester.dir/clean
 .PHONY : CMakeFiles/error_codes_tester.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/common_header_parser_tester.dir
+
+# All Build rule for target.
+CMakeFiles/common_header_parser_tester.dir/all: CMakeFiles/core_utils.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/common_header_parser_tester.dir/build.make CMakeFiles/common_header_parser_tester.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/common_header_parser_tester.dir/build.make CMakeFiles/common_header_parser_tester.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=3,4 "Built target common_header_parser_tester"
+.PHONY : CMakeFiles/common_header_parser_tester.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/common_header_parser_tester.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/common_header_parser_tester.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/common_header_parser_tester.dir/rule
+
+# Convenience name for target.
+common_header_parser_tester: CMakeFiles/common_header_parser_tester.dir/rule
+.PHONY : common_header_parser_tester
+
+# clean rule for target.
+CMakeFiles/common_header_parser_tester.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/common_header_parser_tester.dir/build.make CMakeFiles/common_header_parser_tester.dir/clean
+.PHONY : CMakeFiles/common_header_parser_tester.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/message_identifier_tester.dir
+
+# All Build rule for target.
+CMakeFiles/message_identifier_tester.dir/all: CMakeFiles/core_utils.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/message_identifier_tester.dir/build.make CMakeFiles/message_identifier_tester.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/message_identifier_tester.dir/build.make CMakeFiles/message_identifier_tester.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=16,17 "Built target message_identifier_tester"
+.PHONY : CMakeFiles/message_identifier_tester.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/message_identifier_tester.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/message_identifier_tester.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/message_identifier_tester.dir/rule
+
+# Convenience name for target.
+message_identifier_tester: CMakeFiles/message_identifier_tester.dir/rule
+.PHONY : message_identifier_tester
+
+# clean rule for target.
+CMakeFiles/message_identifier_tester.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/message_identifier_tester.dir/build.make CMakeFiles/message_identifier_tester.dir/clean
+.PHONY : CMakeFiles/message_identifier_tester.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

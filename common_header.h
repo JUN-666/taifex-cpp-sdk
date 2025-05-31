@@ -2,61 +2,71 @@
 #ifndef COMMON_HEADER_H
 #define COMMON_HEADER_H
 
-#include <array>   // For std::array
-#include <cstdint> // For fixed-width integers if needed (though unsigned char is fine for bytes)
+#include <array>
+#include <string>
+#include <vector>  // Needed for BCD conversion helpers
+#include <cstdint>
 #include <cstddef> // For size_t
+// #include <stdexcept> // For std::stoul, etc. exceptions - Not directly used in header
 
-// Forward declaration for parsing function (will be implemented in common_header.cpp later)
-// struct CommonHeader;
-// bool parseCommonHeader(const unsigned char* buffer, size_t buffer_len, CommonHeader& out_header);
+// Forward declare to avoid circular dependency if pack_bcd.h includes error_codes.h which might include this.
+// However, pack_bcd.h does not include error_codes.h directly.
+// #include "pack_bcd.h" // For CoreUtils::packBcdToAscii
+// #include "error_codes.h" // For CoreUtils::ParsingError
 
-namespace CoreUtils { // Assuming this continues to be part of CoreUtils, or a new MessageUtils namespace
+namespace CoreUtils {
+    // Forward declaration from pack_bcd.h
+    // Ensure this signature matches the actual one in pack_bcd.h
+    std::string packBcdToAscii(const std::vector<unsigned char>& bcd_data, size_t num_digits);
 
-/**
- * @brief Represents the "行情訊息共用檔頭" (Common Message Header)
- * as defined in "逐筆行情資訊傳輸作業手冊(V1.9.0).pdf", 肆、四、(一), page 14.
- *
- * This struct stores the raw byte representation of the header fields.
- * Parsing these bytes into meaningful values (e.g., BCD to numbers)
- * will be handled by a dedicated parsing function.
- */
+    // Forward declaration from error_codes.h
+    // We need to ensure this is just a declaration if the definition is complex
+    // or if error_codes.h includes this header. For now, this is fine.
+    class ParsingError; // This is fine as it's just used as an exception type to throw.
+
+
 struct CommonHeader {
     // Constant for the total size of the common header in bytes.
-    // 1 (ESC) + 1 (TC) + 1 (MK) + 6 (IT) + 2 (CI) + 5 (CS) + 1 (VN) + 2 (BL) = 18 bytes
-    static constexpr size_t HEADER_SIZE = 18;
+    // ESC(1) + TC(1) + MK(1) + IT(6) + CI(2) + CS(5) + VN(1) + BL(2) = 19 bytes
+    static constexpr size_t HEADER_SIZE = 19;
 
-    unsigned char esc_code;          // $X(1)$, 1 byte, (ASCII 27)
-    unsigned char transmission_code; // $X(1)$, 1 byte, TRANSMISSION-CODE
-    unsigned char message_kind;      // $X(1)$, 1 byte, MESSAGE-KIND
-
-    // $9(12)$, 6 bytes, 資料時間 PACK BCD (時分秒毫秒微秒)
+    unsigned char esc_code;
+    unsigned char transmission_code;
+    unsigned char message_kind;
     std::array<unsigned char, 6> information_time_bcd;
-
-    // $9(4)$, 2 bytes, 「傳輸群組編號 PACK BCD
     std::array<unsigned char, 2> channel_id_bcd;
-
-    // $9(10)$, 5 bytes, 「傳輸群組訊息流水序號 PACK BCD (max 4294967295)
-    // The document says $9(10)$ which is 10 digits. 5 bytes of BCD can store 10 digits.
     std::array<unsigned char, 5> channel_seq_bcd;
-
-    // $9(2)$, 1 byte, 電文格式版本 PACK BCD
-    unsigned char version_no_bcd; // Note: Doc says $9(2)$ and LENG 1. This implies 1 byte BCD (00-99).
-                                  // If it were 2 BCD digits in 1 byte, like 0x12 for version 12.
-
-    // $9(4)$, 2 bytes, 電文長度 PACK BCD
+    unsigned char version_no_bcd;
     std::array<unsigned char, 2> body_length_bcd;
 
-    // Default constructor (optional, but can be useful)
-    CommonHeader()
-        : esc_code(0), transmission_code(0), message_kind(0), version_no_bcd(0) {
-        information_time_bcd.fill(0);
-        channel_id_bcd.fill(0);
-        channel_seq_bcd.fill(0);
-        body_length_bcd.fill(0);
-    }
+    CommonHeader(); // Default constructor
 
-    // Placeholder for a parsing function that would populate this struct from a buffer.
-    // bool parseFromBuffer(const unsigned char* buffer, size_t buffer_len);
+    /**
+     * @brief Parses a raw byte buffer to populate the CommonHeader structure.
+     *
+     * @param buffer Pointer to the raw data buffer.
+     * @param buffer_len Length of the buffer.
+     * @param out_header Reference to the CommonHeader struct to be populated.
+     * @return True if parsing was successful (i.e., buffer was long enough), false otherwise.
+     */
+    static bool parse(const unsigned char* buffer, size_t buffer_len, CommonHeader& out_header);
+
+    // --- BCD Decoding Helper Methods ---
+
+    /** @return INFORMATION-TIME as a 12-digit string (HHMMSSmmmSSS). Throws CoreUtils::ParsingError on failure. */
+    std::string getInformationTimeString() const;
+
+    /** @return CHANNEL-ID as uint32_t. Throws CoreUtils::ParsingError on failure. $9(4) -> 0-9999 */
+    uint32_t getChannelId() const;
+
+    /** @return CHANNEL-SEQ as uint64_t. Throws CoreUtils::ParsingError on failure. $9(10) -> 0-9,999,999,999 */
+    uint64_t getChannelSeq() const;
+
+    /** @return VERSION-NO as uint8_t. Throws CoreUtils::ParsingError on failure. $9(2) -> 0-99 */
+    uint8_t getVersionNo() const;
+
+    /** @return BODY-LENGTH as uint16_t. Throws CoreUtils::ParsingError on failure. $9(4) -> 0-9999 */
+    uint16_t getBodyLength() const;
 };
 
 } // namespace CoreUtils

@@ -125,12 +125,42 @@ CMakeFiles/core_utils.dir/logger.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/core_utils.dir/logger.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /app/logger.cpp -o CMakeFiles/core_utils.dir/logger.cpp.s
 
+CMakeFiles/core_utils.dir/common_header.cpp.o: CMakeFiles/core_utils.dir/flags.make
+CMakeFiles/core_utils.dir/common_header.cpp.o: /app/common_header.cpp
+CMakeFiles/core_utils.dir/common_header.cpp.o: CMakeFiles/core_utils.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/app/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/core_utils.dir/common_header.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/core_utils.dir/common_header.cpp.o -MF CMakeFiles/core_utils.dir/common_header.cpp.o.d -o CMakeFiles/core_utils.dir/common_header.cpp.o -c /app/common_header.cpp
+
+CMakeFiles/core_utils.dir/common_header.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/core_utils.dir/common_header.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /app/common_header.cpp > CMakeFiles/core_utils.dir/common_header.cpp.i
+
+CMakeFiles/core_utils.dir/common_header.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/core_utils.dir/common_header.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /app/common_header.cpp -o CMakeFiles/core_utils.dir/common_header.cpp.s
+
+CMakeFiles/core_utils.dir/message_identifier.cpp.o: CMakeFiles/core_utils.dir/flags.make
+CMakeFiles/core_utils.dir/message_identifier.cpp.o: /app/message_identifier.cpp
+CMakeFiles/core_utils.dir/message_identifier.cpp.o: CMakeFiles/core_utils.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/app/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/core_utils.dir/message_identifier.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/core_utils.dir/message_identifier.cpp.o -MF CMakeFiles/core_utils.dir/message_identifier.cpp.o.d -o CMakeFiles/core_utils.dir/message_identifier.cpp.o -c /app/message_identifier.cpp
+
+CMakeFiles/core_utils.dir/message_identifier.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/core_utils.dir/message_identifier.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /app/message_identifier.cpp > CMakeFiles/core_utils.dir/message_identifier.cpp.i
+
+CMakeFiles/core_utils.dir/message_identifier.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/core_utils.dir/message_identifier.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /app/message_identifier.cpp -o CMakeFiles/core_utils.dir/message_identifier.cpp.s
+
 # Object files for target core_utils
 core_utils_OBJECTS = \
 "CMakeFiles/core_utils.dir/pack_bcd.cpp.o" \
 "CMakeFiles/core_utils.dir/checksum.cpp.o" \
 "CMakeFiles/core_utils.dir/string_utils.cpp.o" \
-"CMakeFiles/core_utils.dir/logger.cpp.o"
+"CMakeFiles/core_utils.dir/logger.cpp.o" \
+"CMakeFiles/core_utils.dir/common_header.cpp.o" \
+"CMakeFiles/core_utils.dir/message_identifier.cpp.o"
 
 # External object files for target core_utils
 core_utils_EXTERNAL_OBJECTS =
@@ -139,9 +169,11 @@ libcore_utils.a: CMakeFiles/core_utils.dir/pack_bcd.cpp.o
 libcore_utils.a: CMakeFiles/core_utils.dir/checksum.cpp.o
 libcore_utils.a: CMakeFiles/core_utils.dir/string_utils.cpp.o
 libcore_utils.a: CMakeFiles/core_utils.dir/logger.cpp.o
+libcore_utils.a: CMakeFiles/core_utils.dir/common_header.cpp.o
+libcore_utils.a: CMakeFiles/core_utils.dir/message_identifier.cpp.o
 libcore_utils.a: CMakeFiles/core_utils.dir/build.make
 libcore_utils.a: CMakeFiles/core_utils.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/app/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX static library libcore_utils.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/app/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX static library libcore_utils.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/core_utils.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/core_utils.dir/link.txt --verbose=$(VERBOSE)
 
