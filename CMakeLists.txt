@@ -1,83 +1,102 @@
 cmake_minimum_required(VERSION 3.10)
-project(CoreUtils CXX) # Changed project name
+project(MessageProcessingSDK CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS OFF)
+# set(CMAKE_CXX_STANDARD 17) # Consider for std::optional etc.
 
-# Option to build shared libraries (OFF by default, so STATIC is default)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
-# Core Utilities Library
-add_library(core_utils # Type (STATIC/SHARED) determined by BUILD_SHARED_LIBS default or user setting
-    pack_bcd.cpp
-    checksum.cpp
-    string_utils.cpp
-    logger.cpp
-    common_header.cpp
-    message_identifier.cpp # <-- Add this line
-    # error_codes.h is header-only, included by the .cpp files that need it
+# Core Utilities Library (core_utils)
+add_library(core_utils
+    pack_bcd.cpp checksum.cpp string_utils.cpp logger.cpp
+    common_header.cpp message_identifier.cpp
 )
-# Set properties for Windows shared library builds (DLL export/import)
-# This would typically involve generating a config header with dllexport/dllimport macros.
-# For a simple static library, this is not strictly needed but good for completeness if shared libs are enabled.
-# if(WIN32 AND BUILD_SHARED_LIBS)
-#   target_compile_definitions(core_utils PRIVATE "-DCORE_UTILS_BUILD_DLL") # Example define
-#   # And public headers would use CORE_UTILS_API macro for dllexport/import
-# endif()
-
-
-target_include_directories(core_utils
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> # For consumers finding headers during build
-        $<INSTALL_INTERFACE:include> # For consumers finding headers after installation (e.g. /usr/local/include)
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR} # For sources within the library itself
+target_include_directories(core_utils PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include>
 )
-
 find_package(Threads REQUIRED)
-target_link_libraries(core_utils PRIVATE Threads::Threads) # PUBLIC if consumers also need Threads, PRIVATE if internal use only.
-                                                       # Logger uses threads, but consumers of logger macros don't directly.
-                                                       # Let's assume PRIVATE for now unless a header exposes thread objects.
-                                                       # Re-evaluating: if headers include <thread> or <mutex> via logger.h, then PUBLIC might be safer.
-                                                       # logger.h includes <chrono> but not <thread> or <mutex> directly.
-                                                       # So, PRIVATE for Threads::Threads linkage to core_utils should be fine.
-                                                       # Changing Threads::Threads to PRIVATE linkage for core_utils.
-                                                       # target_link_libraries(core_utils PRIVATE Threads::Threads) -- already was private, good.
+target_link_libraries(core_utils PRIVATE Threads::Threads)
+
+# Specific Message Parsers Library (specific_message_parsers)
+add_library(specific_message_parsers STATIC
+    messages/message_parser_utils.cpp messages/message_i010.cpp messages/message_i081.cpp
+    messages/message_i083.cpp messages/message_i001.cpp messages/message_i002.cpp
+)
+target_link_libraries(specific_message_parsers PUBLIC core_utils)
+target_include_directories(specific_message_parsers PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include>
+)
+
+# Order Book Library (order_book_lib)
+add_library(order_book_lib STATIC
+    order_book/order_book.cpp
+)
+target_link_libraries(order_book_lib PUBLIC specific_message_parsers)
+target_include_directories(order_book_lib PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include>
+)
+
+# NEW: Taifex SDK Library (taifex_sdk_lib)
+add_library(taifex_sdk_lib STATIC # Could be SHARED if BUILD_SHARED_LIBS is ON and configured
+    sdk/taifex_sdk.cpp
+)
+# TaifexSdk uses OrderBook, message structs, and core utils.
+# Linking PUBLIC to order_book_lib makes its headers (and transitively others) available.
+target_link_libraries(taifex_sdk_lib PUBLIC order_book_lib)
+
+target_include_directories(taifex_sdk_lib PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> # To find sdk/taifex_sdk.h during build by consumers
+    $<INSTALL_INTERFACE:include>                  # For installed sdk/taifex_sdk.h
+)
+
 
 # --- Installation ---
-# Install the library
-install(TARGETS core_utils
-    ARCHIVE DESTINATION lib  # For static libs
-    LIBRARY DESTINATION lib  # For shared libs (Windows .dll, Linux .so)
-    RUNTIME DESTINATION bin  # For .dlls needed at runtime on Windows by executables
-)
+install(TARGETS core_utils ARCHIVE DESTINATION lib LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
+install(FILES pack_bcd.h checksum.h string_utils.h logger.h error_codes.h common_header.h message_identifier.h DESTINATION include/CoreUtils)
 
-# Install public headers
-# Assuming all .h files in the root are public headers for the library
-install(FILES
-    pack_bcd.h
-    checksum.h
-    string_utils.h
-    logger.h
-    error_codes.h
-    common_header.h # <-- Add this line
-    DESTINATION include/CoreUtils # Install them into an "CoreUtils" subdirectory for namespacing
-    COMPONENT Devel # Optional component name
+install(TARGETS specific_message_parsers ARCHIVE DESTINATION lib LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
+install(DIRECTORY messages/ DESTINATION include/SpecificMessageParsers FILES_MATCHING PATTERN "*.h")
+
+install(TARGETS order_book_lib ARCHIVE DESTINATION lib LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
+install(FILES order_book/order_book.h DESTINATION include/OrderBookManagement)
+
+# NEW: Install taifex_sdk_lib and its header
+install(TARGETS taifex_sdk_lib
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
 )
-# A more robust way for headers if they are in a dedicated 'include' dir:
-# install(DIRECTORY include/CoreUtils DESTINATION include)
+install(FILES sdk/taifex_sdk.h DESTINATION include/Taifex) # Main SDK header
 
 
 # --- Test Executables ---
-# Common function to add a test executable
 function(add_core_utils_test test_name main_cpp_file)
     add_executable(${test_name} ${main_cpp_file})
     target_link_libraries(${test_name} PRIVATE core_utils)
-    # No need for target_include_directories for the test main if core_utils
-    # correctly exports its include directory via PUBLIC target_include_directories.
 endfunction()
 
+function(add_message_parser_test test_name main_cpp_file)
+    add_executable(${test_name} ${main_cpp_file})
+    target_link_libraries(${test_name} PRIVATE specific_message_parsers)
+endfunction()
+
+function(add_order_book_test test_name main_cpp_file)
+    add_executable(${test_name} ${main_cpp_file})
+    target_link_libraries(${test_name} PRIVATE order_book_lib)
+endfunction()
+
+# NEW: Common function to add a Taifex SDK test executable
+function(add_taifex_sdk_test test_name main_cpp_file)
+    add_executable(${test_name} ${main_cpp_file})
+    target_link_libraries(${test_name} PRIVATE taifex_sdk_lib)
+endfunction()
+
+# Existing tests ...
 add_core_utils_test(pack_bcd_tester main_pack_bcd_test.cpp)
 add_core_utils_test(checksum_tester main_checksum_test.cpp)
 add_core_utils_test(string_utils_tester main_string_utils_test.cpp)
@@ -86,18 +105,30 @@ add_core_utils_test(error_codes_tester main_error_codes_test.cpp)
 add_core_utils_test(common_header_parser_tester main_common_header_parser_test.cpp)
 add_core_utils_test(message_identifier_tester main_message_identifier_test.cpp)
 
+add_message_parser_test(test_message_i010 tests/test_message_i010.cpp)
+add_message_parser_test(test_message_i081 tests/test_message_i081.cpp)
+add_message_parser_test(test_message_i083 tests/test_message_i083.cpp)
+add_message_parser_test(test_message_i001 tests/test_message_i001.cpp)
+add_message_parser_test(test_message_i002 tests/test_message_i002.cpp)
+
+add_order_book_test(test_order_book tests/test_order_book.cpp)
+
+# NEW: Add test for TaifexSdk
+add_taifex_sdk_test(test_taifex_sdk tests/test_taifex_sdk.cpp)
+
+
 # Enable testing with CTest
 enable_testing()
 
-# Example of adding tests to CTest (optional for this step, but good practice)
-# add_test(NAME PackBCDTest COMMAND pack_bcd_tester)
-# add_test(NAME ChecksumTest COMMAND checksum_tester)
-# add_test(NAME StringUtilsTest COMMAND string_utils_tester)
-# add_test(NAME LoggerTest COMMAND logger_tester) # Logger output is visual
-# add_test(NAME ErrorCodesTest COMMAND error_codes_tester) # Error codes output is visual
+# CTest entries ...
+add_test(NAME TestMessageI010 COMMAND test_message_i010)
+add_test(NAME TestMessageI081 COMMAND test_message_i081)
+add_test(NAME TestMessageI083 COMMAND test_message_i083)
+add_test(NAME TestMessageI001 COMMAND test_message_i001)
+add_test(NAME TestMessageI002 COMMAND test_message_i002)
+add_test(NAME TestOrderBook COMMAND test_order_book)
 
-# To build and install:
-# mkdir build && cd build
-# cmake ..
-# cmake --build .
-# cmake --install . --prefix "your_install_path" (e.g., ../install)
+# NEW: Add CTest entry for the TaifexSdk test
+add_test(NAME TestTaifexSdk COMMAND test_taifex_sdk)
+
+# ... (rest of CMakeLists.txt, e.g. existing CTest entries if any) ...
