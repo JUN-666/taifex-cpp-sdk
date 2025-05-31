@@ -141,6 +141,20 @@ add_order_book_test(test_order_book tests/test_order_book.cpp)
 add_taifex_sdk_test(test_taifex_sdk tests/test_taifex_sdk.cpp)
 
 
+# --- Examples ---
+# NEW: PCAP Replay Example
+add_executable(pcap_replay_example
+    examples/pcap_replay_example.cpp
+    utils/log_file_packet_simulator.cpp # Compile simulator utility with the example
+)
+target_link_libraries(pcap_replay_example PRIVATE taifex_sdk_lib)
+# taifex_sdk_lib PUBLICly links order_book_lib, taifex_networking_lib,
+# specific_message_parsers, and core_utils.
+# It also makes ${CMAKE_CURRENT_SOURCE_DIR} available as a PUBLIC include path,
+# which should allow pcap_replay_example.cpp to find "utils/log_file_packet_simulator.h"
+# and "sdk/taifex_sdk.h", etc.
+
+
 # Enable testing with CTest
 enable_testing()
 
