@@ -1,13 +1,20 @@
 cmake_minimum_required(VERSION 3.10)
-project(MessageProcessingSDK CXX) # Updated project name to be more encompassing
+project(MessageProcessingSDK CXX)
 
-set(CMAKE_CXX_STANDARD 11) # Was 11, let's ensure it's at least C++11 for our code.
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Check for C++17 support for std::optional, and enable if available.
+# This is a common way to handle optional C++ features.
+# If not available, the build might fail if std::optional is used without polyfills/alternatives.
+# For this exercise, we'll assume std::optional is available or the environment supports C++17.
+# A more robust solution would involve checking CMAKE_CXX_KNOWN_FEATURES for cxx_std_17.
+# set(CMAKE_CXX_STANDARD 17) # Or conditionally set based on feature detection.
+
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
-# Core Utilities Library (core_utils) - No changes to its definition
+# Core Utilities Library (core_utils)
 add_library(core_utils
     pack_bcd.cpp
     checksum.cpp
@@ -27,8 +34,8 @@ find_package(Threads REQUIRED)
 target_link_libraries(core_utils PRIVATE Threads::Threads)
 
 
-# NEW: Specific Message Parsers Library (specific_message_parsers)
-add_library(specific_message_parsers STATIC # Explicitly STATIC, or could use BUILD_SHARED_LIBS
+# Specific Message Parsers Library (specific_message_parsers)
+add_library(specific_message_parsers STATIC
     messages/message_parser_utils.cpp
     messages/message_i010.cpp
     messages/message_i081.cpp
@@ -36,14 +43,31 @@ add_library(specific_message_parsers STATIC # Explicitly STATIC, or could use BU
     messages/message_i001.cpp
     messages/message_i002.cpp
 )
-target_link_libraries(specific_message_parsers PUBLIC core_utils) # PUBLIC so users of specific_message_parsers also link core_utils
+target_link_libraries(specific_message_parsers PUBLIC core_utils)
 
 target_include_directories(specific_message_parsers
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> # For its own headers and for consumers
-        $<INSTALL_INTERFACE:include> # For installed headers
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<INSTALL_INTERFACE:include>
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR} # For its own sources to find headers in root like pack_bcd.h via core_utils
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# NEW: Order Book Library (order_book_lib)
+add_library(order_book_lib STATIC
+    order_book/order_book.cpp
+)
+# OrderBook uses message structs from specific_message_parsers in its method signatures / cpp file.
+# It also needs access to core_utils for things like logging or if specific_message_parsers needs it.
+# Linking PUBLIC to specific_message_parsers ensures consumers of order_book_lib also get its headers.
+target_link_libraries(order_book_lib PUBLIC specific_message_parsers)
+
+target_include_directories(order_book_lib
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> # To find order_book.h during build
+        $<INSTALL_INTERFACE:include>                  # For installed order_book.h
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR} # For its own .cpp to find headers from linked libs if needed
 )
 
 
@@ -54,74 +78,80 @@ install(TARGETS core_utils
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
 )
-# Install core_utils public headers
 install(FILES
-    pack_bcd.h
-    checksum.h
-    string_utils.h
-    logger.h
-    error_codes.h
-    common_header.h
-    message_identifier.h # Added this line as it was missing from previous install list
+    pack_bcd.h checksum.h string_utils.h logger.h error_codes.h common_header.h message_identifier.h
     DESTINATION include/CoreUtils
 )
 
-# NEW: Install specific_message_parsers library
+# Install specific_message_parsers library
 install(TARGETS specific_message_parsers
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
 )
-# NEW: Install specific_message_parsers public headers
 install(DIRECTORY messages/ DESTINATION include/SpecificMessageParsers FILES_MATCHING PATTERN "*.h")
+
+# NEW: Install order_book_lib and its header
+install(TARGETS order_book_lib
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+)
+install(FILES order_book/order_book.h DESTINATION include/OrderBookManagement)
 
 
 # --- Test Executables ---
-# Common function to add a core_utils test executable
 function(add_core_utils_test test_name main_cpp_file)
     add_executable(${test_name} ${main_cpp_file})
     target_link_libraries(${test_name} PRIVATE core_utils)
 endfunction()
 
-# NEW: Common function to add a message parser test executable
 function(add_message_parser_test test_name main_cpp_file)
     add_executable(${test_name} ${main_cpp_file})
-    target_link_libraries(${test_name} PRIVATE specific_message_parsers) # Links against specific_message_parsers (which links core_utils)
+    target_link_libraries(${test_name} PRIVATE specific_message_parsers)
+endfunction()
+
+# NEW: Common function to add an order book test executable
+function(add_order_book_test test_name main_cpp_file)
+    add_executable(${test_name} ${main_cpp_file})
+    # test_order_book links against order_book_lib,
+    # which transitively links specific_message_parsers and core_utils due to PUBLIC linkage.
+    target_link_libraries(${test_name} PRIVATE order_book_lib)
 endfunction()
 
 # Existing core_utils tests
 add_core_utils_test(pack_bcd_tester main_pack_bcd_test.cpp)
 add_core_utils_test(checksum_tester main_checksum_test.cpp)
+# ... (other core_utils tests) ...
 add_core_utils_test(string_utils_tester main_string_utils_test.cpp)
 add_core_utils_test(logger_tester main_logger_test.cpp)
 add_core_utils_test(error_codes_tester main_error_codes_test.cpp)
 add_core_utils_test(common_header_parser_tester main_common_header_parser_test.cpp)
 add_core_utils_test(message_identifier_tester main_message_identifier_test.cpp)
 
-# NEW: Add tests for specific message parsers
+
+# Tests for specific message parsers
 add_message_parser_test(test_message_i010 tests/test_message_i010.cpp)
 add_message_parser_test(test_message_i081 tests/test_message_i081.cpp)
 add_message_parser_test(test_message_i083 tests/test_message_i083.cpp)
 add_message_parser_test(test_message_i001 tests/test_message_i001.cpp)
 add_message_parser_test(test_message_i002 tests/test_message_i002.cpp)
 
+# NEW: Add test for OrderBook
+add_order_book_test(test_order_book tests/test_order_book.cpp)
+
 
 # Enable testing with CTest
 enable_testing()
 
-# NEW: Add CTest entries for the new tests (optional, but good practice)
+# CTest entries for message parser tests
 add_test(NAME TestMessageI010 COMMAND test_message_i010)
 add_test(NAME TestMessageI081 COMMAND test_message_i081)
 add_test(NAME TestMessageI083 COMMAND test_message_i083)
 add_test(NAME TestMessageI001 COMMAND test_message_i001)
 add_test(NAME TestMessageI002 COMMAND test_message_i002)
 
-# Existing CTest entries (example, can be uncommented/added if desired)
-# add_test(NAME PackBCDTest COMMAND pack_bcd_tester)
-# ... other existing tests ...
+# NEW: Add CTest entry for the OrderBook test
+add_test(NAME TestOrderBook COMMAND test_order_book)
 
-# To build and install:
-# mkdir build && cd build
-# cmake ..
-# cmake --build .
-# cmake --install . --prefix "your_install_path" (e.g., ../install_dir relative to build)
+# ... (rest of CMakeLists.txt, e.g. existing CTest entries if any) ...
