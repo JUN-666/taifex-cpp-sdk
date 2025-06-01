@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 project(MessageProcessingSDK CXX)
 
-# Update C++ Standard to C++17
-set(CMAKE_CXX_STANDARD 17)
+# Update C++ Standard to C++20
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS OFF)
-# Comment related to std::optional with C++11 is no longer needed as C++17 is standard.
+# C++20 is now the project standard.
 
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
