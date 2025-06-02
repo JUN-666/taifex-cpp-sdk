@@ -1,6 +1,6 @@
 #include "networking/retransmission_protocol.h"
 #include "networking/endian_utils.h" // For byte order conversions
-#include "core_utils/logger.h"       // For logging errors
+#include "logger.h"       // For logging errors
 
 #include <vector>
 #include <numeric>   // For std::accumulate (alternative for checksum, but direct loop is fine)
