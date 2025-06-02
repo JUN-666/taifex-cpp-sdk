@@ -4,7 +4,7 @@
 #include "sdk/taifex_sdk.h"
 
 #include "common_header.h" // Removed core_utils/ prefix
-#include "logger.h"        // Removed core_utils/ prefix
+#include "../logger.h"     // Corrected path to root
 
 #include "networking/retransmission_protocol.h" // For TaifexRetransmission::DataResponse102 etc.
 
@@ -21,7 +21,7 @@ NetworkManager::NetworkManager(Taifex::TaifexSdk* sdk_core_logic)
     if (!sdk_core_logic_) {
         // This is a critical error, NetworkManager cannot function without the SDK logic.
         // Consider throwing an exception or ensuring this condition is never met.
-        LOG_CRITICAL << "NetworkManager created with null TaifexSdk pointer!";
+        LOG_ERROR << "NetworkManager created with null TaifexSdk pointer!";
     }
     LOG_INFO << "NetworkManager created.";
 }
@@ -234,7 +234,7 @@ void NetworkManager::connect_retransmission_client(bool use_primary_server) {
             server_config_opt->session_id,
             server_config_opt->password,
             [this](const unsigned char* data, size_t length) { this->on_retransmitted_market_data(data, length); },
-            [this](const TaifexRetransmission::DataResponse102& resp, const std::vector<unsigned char>& retrans_data) { this->on_retransmission_status(resp); }, // Adjusted for new sig
+            [this](const TaifexRetransmission::DataResponse102& resp, const std::vector<unsigned char>& retrans_data) { this->on_retransmission_status(resp, retrans_data); }, // Adjusted for new sig
             [this](const TaifexRetransmission::ErrorNotification010& err_msg) { this->on_retransmission_error(err_msg); }, // Adjusted
             [this]() { this->on_retransmission_disconnected(); },
             [this]() { LOG_INFO << "NM: Retransmission client logged in to " << (retrans_primary_active_ ? "primary" : "backup") << " server.";}
@@ -250,7 +250,7 @@ void NetworkManager::connect_retransmission_client(bool use_primary_server) {
 
 
 // Other callback implementations (on_retransmission_status, etc.)
-void NetworkManager::on_retransmission_status(const TaifexRetransmission::DataResponse102& response) { // Added retrans_data
+void NetworkManager::on_retransmission_status(const TaifexRetransmission::DataResponse102& response, const std::vector<unsigned char>& retrans_data) { // Added retrans_data
     LOG_INFO << "NM: Retransmission status update. Channel: " << response.channel_id <<
                            ", Status: " << response.status_code <<
                            ", BeginSeq: " << response.begin_seq_no <<
