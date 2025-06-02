@@ -226,6 +226,14 @@ struct ErrorNotification010 {
 #pragma pack(pop)
 
 /**
+ * @brief Calculates the check code for LoginRequest020 messages.
+ * @param mult_op The multiplication operator.
+ * @param password_str The password string.
+ * @return The calculated 8-bit check code.
+ */
+uint8_t calculate_check_code(uint16_t mult_op, const std::string& password_str);
+
+/**
  * @brief Calculates the checksum for TAIFEX retransmission protocol messages.
  * The checksum is the sum of bytes from the 'MsgSize' field (inclusive) up to
  * the byte immediately preceding the 'CheckSum' field, modulo 256.
