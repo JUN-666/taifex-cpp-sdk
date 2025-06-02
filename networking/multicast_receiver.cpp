@@ -1,5 +1,5 @@
 #include "networking/multicast_receiver.h"
-#include "core_utils/logger.h" // Assuming a logger is available
+#include "logger.h" // Assuming a logger is available
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -37,17 +37,17 @@ MulticastReceiver::ActiveSubscription::~ActiveSubscription() {
 
 MulticastReceiver::MulticastReceiver(DataCallback callback)
     : data_callback_(std::move(callback)), running_(false) {
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "MulticastReceiver created.");
+    LOG_INFO << "MulticastReceiver created.";
 }
 
 MulticastReceiver::~MulticastReceiver() {
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "MulticastReceiver shutting down...");
+    LOG_INFO << "MulticastReceiver shutting down...";
     stop();
 }
 
 bool MulticastReceiver::add_subscription(const std::string& group_ip, uint16_t port, const std::string& local_interface_ip) {
     if (running_) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "Cannot add subscription while receiver is running.");
+        LOG_WARNING << "Cannot add subscription while receiver is running.";
         return false;
     }
     MulticastGroupSubscription config;
@@ -60,17 +60,17 @@ bool MulticastReceiver::add_subscription(const std::string& group_ip, uint16_t p
     // thread_running_flag is initialized to false by ActiveSubscription constructor
 
     subscriptions_.push_back(std::move(sub_ptr));
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "Added subscription for " + group_ip + ":" + std::to_string(port));
+    LOG_INFO << "Added subscription for " << group_ip << ":" << port;
     return true;
 }
 
 bool MulticastReceiver::start() {
     if (running_) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "MulticastReceiver already running.");
+        LOG_WARNING << "MulticastReceiver already running.";
         return true;
     }
     if (subscriptions_.empty()) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "No subscriptions to start.");
+        LOG_WARNING << "No subscriptions to start.";
         return false;
     }
 
@@ -82,13 +82,13 @@ bool MulticastReceiver::start() {
 
         sub->socket_fd = socket(AF_INET, SOCK_DGRAM, 0);
         if (sub->socket_fd < 0) {
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Failed to create socket for " + sub->config.group_ip + ": " + strerror(errno));
+            LOG_ERROR << "Failed to create socket for " << sub->config.group_ip << ": " << strerror(errno);
             continue;
         }
 
         int reuse = 1;
         if (setsockopt(sub->socket_fd, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse)) < 0) {
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Failed to set SO_REUSEADDR for " + sub->config.group_ip + ": " + strerror(errno));
+            LOG_ERROR << "Failed to set SO_REUSEADDR for " << sub->config.group_ip << ": " << strerror(errno);
             close(sub->socket_fd);
             sub->socket_fd = -1;
             continue;
@@ -101,7 +101,7 @@ bool MulticastReceiver::start() {
         local_sockaddr.sin_addr.s_addr = htonl(INADDR_ANY); // Bind to 0.0.0.0 to receive on specified port from any interface
 
         if (bind(sub->socket_fd, (struct sockaddr*)&local_sockaddr, sizeof(local_sockaddr)) < 0) {
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Failed to bind socket for " + sub->config.group_ip + ":" + std::to_string(sub->config.port) + ": " + strerror(errno));
+            LOG_ERROR << "Failed to bind socket for " << sub->config.group_ip << ":" << sub->config.port << ": " << strerror(errno);
             close(sub->socket_fd);
             sub->socket_fd = -1;
             continue;
@@ -116,7 +116,7 @@ bool MulticastReceiver::start() {
         }
 
         if (setsockopt(sub->socket_fd, IPPROTO_IP, IP_ADD_MEMBERSHIP, (char *)&group_req, sizeof(group_req)) < 0) {
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Failed to join multicast group " + sub->config.group_ip + ": " + strerror(errno));
+            LOG_ERROR << "Failed to join multicast group " << sub->config.group_ip << ": " << strerror(errno);
             close(sub->socket_fd);
             sub->socket_fd = -1;
             continue;
@@ -126,17 +126,17 @@ bool MulticastReceiver::start() {
         tv.tv_sec = 1;
         tv.tv_usec = 0;
         if (setsockopt(sub->socket_fd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv) < 0) {
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "Failed to set SO_RCVTIMEO for " + sub->config.group_ip + ". Loop may be less responsive to stop().");
+            LOG_WARNING << "Failed to set SO_RCVTIMEO for " << sub->config.group_ip << ". Loop may be less responsive to stop().";
         }
 
         sub->thread_running_flag = true; // Signal this specific thread it can run
         sub->receiver_thread = std::thread(&MulticastReceiver::receive_loop, this, sub);
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "Started listening on " + sub->config.group_ip + ":" + std::to_string(sub->config.port));
+        LOG_INFO << "Started listening on " << sub->config.group_ip << ":" << sub->config.port;
         any_started_successfully = true;
     }
 
     if (!any_started_successfully && !subscriptions_.empty()) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "No multicast subscriptions could be started.");
+        LOG_ERROR << "No multicast subscriptions could be started.";
         running_ = false; // Reset overall running flag if nothing started
         return false;
     }
@@ -148,29 +148,29 @@ void MulticastReceiver::stop() {
     if (!running_.exchange(false)) { // Set to false and get previous value
         return; // Already stopped or stopping
     }
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "Stopping MulticastReceiver threads...");
+    LOG_INFO << "Stopping MulticastReceiver threads...";
 
     for (auto& sub_unique_ptr : subscriptions_) {
         if (sub_unique_ptr) {
             sub_unique_ptr->thread_running_flag = false; // Signal individual thread to stop
             if (sub_unique_ptr->receiver_thread.joinable()) {
                 sub_unique_ptr->receiver_thread.join();
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "Joined thread for " + sub_unique_ptr->config.group_ip);
+                LOG_DEBUG << "Joined thread for " << sub_unique_ptr->config.group_ip;
             }
             if (sub_unique_ptr->socket_fd >= 0) {
                 close(sub_unique_ptr->socket_fd);
                 sub_unique_ptr->socket_fd = -1;
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "Closed socket for " + sub_unique_ptr->config.group_ip);
+                LOG_DEBUG << "Closed socket for " << sub_unique_ptr->config.group_ip;
             }
         }
     }
     subscriptions_.clear();
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "MulticastReceiver stopped.");
+    LOG_INFO << "MulticastReceiver stopped.";
 }
 
 void MulticastReceiver::receive_loop(ActiveSubscription* sub_ptr) {
     if (!sub_ptr || sub_ptr->socket_fd < 0) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Invalid subscription or socket for receive_loop for " + (sub_ptr ? sub_ptr->config.group_ip : "unknown"));
+        LOG_ERROR << "Invalid subscription or socket for receive_loop for " << (sub_ptr ? sub_ptr->config.group_ip : "unknown");
         return;
     }
 
@@ -179,7 +179,7 @@ void MulticastReceiver::receive_loop(ActiveSubscription* sub_ptr) {
     struct sockaddr_in sender_addr;
     socklen_t sender_addr_len = sizeof(sender_addr);
 
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "Receive loop started for " + sub_ptr->config.group_ip + ":" + std::to_string(sub_ptr->config.port));
+    LOG_DEBUG << "Receive loop started for " << sub_ptr->config.group_ip << ":" << sub_ptr->config.port;
 
     // Use thread_running_flag from the specific ActiveSubscription
     while (running_ && sub_ptr->thread_running_flag) {
@@ -192,10 +192,10 @@ void MulticastReceiver::receive_loop(ActiveSubscription* sub_ptr) {
             }
             // Check flags again before logging error, as stop() might have closed the socket
             if (!(running_ && sub_ptr->thread_running_flag) && (errno == EINTR || errno == EBADF)) {
-                 CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "recvfrom interrupted or socket closed on " + sub_ptr->config.group_ip + ", likely due to stop().");
+                 LOG_INFO << "recvfrom interrupted or socket closed on " << sub_ptr->config.group_ip << ", likely due to stop().";
                 break;
             }
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "recvfrom error on " + sub_ptr->config.group_ip + ": " + strerror(errno));
+            LOG_ERROR << "recvfrom error on " << sub_ptr->config.group_ip << ": " << strerror(errno);
             if (running_ && sub_ptr->thread_running_flag) std::this_thread::sleep_for(std::chrono::milliseconds(10));
             continue;
         }
@@ -205,7 +205,7 @@ void MulticastReceiver::receive_loop(ActiveSubscription* sub_ptr) {
                            sub_ptr->config.group_ip, sub_ptr->config.port);
         }
     }
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "Receive loop ended for " + sub_ptr->config.group_ip + ":" + std::to_string(sub_ptr->config.port));
+    LOG_DEBUG << "Receive loop ended for " << sub_ptr->config.group_ip << ":" << sub_ptr->config.port;
 }
 
 } // namespace Networking
