@@ -1,7 +1,7 @@
 #include "sdk/taifex_sdk.h"
-#include "core_utils/common_header.h"      // For CoreUtils::CommonHeader
-#include "core_utils/message_identifier.h" // For CoreUtils::MessageType for checks
-#include "core_utils/checksum.h"           // For CoreUtils::calculate_checksum
+#include "common_header.h"                 // For CoreUtils::CommonHeader
+#include "message_identifier.h"            // For CoreUtils::MessageType for checks
+#include "checksum.h"                      // For CoreUtils::calculate_checksum
 #include "messages/message_i010.h"         // For SpecificMessageParsers::MessageI010 for verification
 
 #include <iostream>
