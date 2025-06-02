@@ -1,6 +1,6 @@
 #include "utils/log_file_packet_simulator.h" // As per Step 3
 #include "sdk/taifex_sdk.h"                 // As per Dept E
-#include "core_utils/logger.h"              // For logging control/output
+#include "logger.h"              // For logging control/output
 
 #include <iostream>
 #include <string>
@@ -18,26 +18,26 @@ int main(int argc, char* argv[]) {
     std::string log_filepath = argv[1];
 
     // Optional: Configure logger level for more verbose output during replay
-    CoreUtils::Logger::SetLevel(CoreUtils::LogLevel::INFO); // Or DEBUG for more details
+    CoreUtils::setLogLevel(CoreUtils::LogLevel::INFO); // Or DEBUG for more details
 
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "Starting PCAP Replay Example...");
+    LOG_INFO << "Starting PCAP Replay Example...";
 
     // 1. Instantiate the SDK
     Taifex::TaifexSdk sdk;
     if (!sdk.initialize()) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::FATAL, "Failed to initialize TaifexSdk.");
+        LOG_ERROR << "Failed to initialize TaifexSdk.";
         return 1;
     }
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "TaifexSdk initialized.");
+    LOG_INFO << "TaifexSdk initialized.";
 
     // 2. Instantiate the LogFilePacketSimulator
     // Assuming constructor with default header sizes is used, or adjust if specific sizes are needed for the pcap.
     Utils::LogFilePacketSimulator simulator(log_filepath);
     if (!simulator.open()) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::FATAL, "Failed to open log file: " + log_filepath);
+        LOG_ERROR << "Failed to open log file: " + log_filepath;
         return 1;
     }
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "Log file opened: " + log_filepath);
+    LOG_INFO << "Log file opened: " + log_filepath;
 
     // 3. Loop and process packets
     long packet_count = 0;
@@ -45,8 +45,8 @@ int main(int argc, char* argv[]) {
         std::vector<unsigned char> taifex_packet = simulator.get_next_taifex_packet();
         if (!taifex_packet.empty()) {
             packet_count++;
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "Replaying packet " + std::to_string(packet_count) +
-                                                            " (size: " + std::to_string(taifex_packet.size()) + " bytes)");
+            LOG_DEBUG << "Replaying packet " + std::to_string(packet_count) +
+                                                            " (size: " + std::to_string(taifex_packet.size()) + " bytes)";
             sdk.process_message(taifex_packet.data(), taifex_packet.size());
 
             // Optional: Add a small delay if simulating real-time arrival
@@ -59,21 +59,21 @@ int main(int argc, char* argv[]) {
             if (!simulator.has_next_packet() && simulator.is_open()) {
                 // If has_next_packet is false after get_next_taifex_packet returned empty,
                 // it's likely a clean EOF or a stream error that has_next_packet can also detect.
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "End of file or stream error reached after processing " + std::to_string(packet_count) + " packets.");
+                LOG_INFO << "End of file or stream error reached after processing " + std::to_string(packet_count) + " packets.";
                 break; // Exit loop on EOF or persistent error
             } else if (simulator.is_open()) {
                 // Still open and !has_next_packet was false before, but got empty packet.
                 // This implies a single problematic record was skipped by the simulator.
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "Simulator returned an empty TAIFEX packet but file stream seems ok. Possibly a malformed PCAP record or non-TAIFEX data. Continuing...");
+                LOG_WARNING << "Simulator returned an empty TAIFEX packet but file stream seems ok. Possibly a malformed PCAP record or non-TAIFEX data. Continuing...";
             } else {
                 // File is no longer open (e.g., simulator closed it due to critical error)
-                 CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Simulator file stream is no longer open after attempting to get a packet. Processed " + std::to_string(packet_count) + " packets.");
+                 LOG_ERROR << "Simulator file stream is no longer open after attempting to get a packet. Processed " + std::to_string(packet_count) + " packets.";
                 break;
             }
         }
     }
 
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "Finished replaying log file. Total TAIFEX packets processed: " + std::to_string(packet_count));
+    LOG_INFO << "Finished replaying log file. Total TAIFEX packets processed: " + std::to_string(packet_count);
 
     // 4. Close the simulator (which closes the file)
     simulator.close();

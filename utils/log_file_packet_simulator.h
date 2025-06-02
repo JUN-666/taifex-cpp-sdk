@@ -110,9 +110,9 @@ private:
      * @param header_buffer A buffer containing the raw bytes of the packet header.
      *                      Must be at least `pcap_packet_header_size_` bytes long.
      * @param out_length Reference to store the extracted captured length.
-     * @return True if the length was successfully read (e.g., buffer is valid), false otherwise.
+     * @return True if the length was successfully read, false otherwise (e.g. read error from stream).
      */
-    bool read_pcap_packet_captured_length(const std::vector<unsigned char>& header_buffer, uint32_t& out_length);
+    bool read_pcap_packet_captured_length(uint32_t& out_length);
 };
 
 } // namespace Utils

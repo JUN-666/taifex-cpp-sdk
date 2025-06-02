@@ -68,20 +68,6 @@ all: CMakeFiles/specific_message_parsers.dir/all
 all: CMakeFiles/order_book_lib.dir/all
 all: CMakeFiles/taifex_networking_lib.dir/all
 all: CMakeFiles/taifex_sdk_lib.dir/all
-all: CMakeFiles/pack_bcd_tester.dir/all
-all: CMakeFiles/checksum_tester.dir/all
-all: CMakeFiles/string_utils_tester.dir/all
-all: CMakeFiles/logger_tester.dir/all
-all: CMakeFiles/error_codes_tester.dir/all
-all: CMakeFiles/common_header_parser_tester.dir/all
-all: CMakeFiles/message_identifier_tester.dir/all
-all: CMakeFiles/test_message_i010.dir/all
-all: CMakeFiles/test_message_i081.dir/all
-all: CMakeFiles/test_message_i083.dir/all
-all: CMakeFiles/test_message_i001.dir/all
-all: CMakeFiles/test_message_i002.dir/all
-all: CMakeFiles/test_order_book.dir/all
-all: CMakeFiles/test_taifex_sdk.dir/all
 all: CMakeFiles/pcap_replay_example.dir/all
 .PHONY : all
 
@@ -95,20 +81,6 @@ clean: CMakeFiles/specific_message_parsers.dir/clean
 clean: CMakeFiles/order_book_lib.dir/clean
 clean: CMakeFiles/taifex_networking_lib.dir/clean
 clean: CMakeFiles/taifex_sdk_lib.dir/clean
-clean: CMakeFiles/pack_bcd_tester.dir/clean
-clean: CMakeFiles/checksum_tester.dir/clean
-clean: CMakeFiles/string_utils_tester.dir/clean
-clean: CMakeFiles/logger_tester.dir/clean
-clean: CMakeFiles/error_codes_tester.dir/clean
-clean: CMakeFiles/common_header_parser_tester.dir/clean
-clean: CMakeFiles/message_identifier_tester.dir/clean
-clean: CMakeFiles/test_message_i010.dir/clean
-clean: CMakeFiles/test_message_i081.dir/clean
-clean: CMakeFiles/test_message_i083.dir/clean
-clean: CMakeFiles/test_message_i001.dir/clean
-clean: CMakeFiles/test_message_i002.dir/clean
-clean: CMakeFiles/test_order_book.dir/clean
-clean: CMakeFiles/test_taifex_sdk.dir/clean
 clean: CMakeFiles/pcap_replay_example.dir/clean
 .PHONY : clean
 
@@ -119,7 +91,7 @@ clean: CMakeFiles/pcap_replay_example.dir/clean
 CMakeFiles/core_utils.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=5,6,7,8,9,10,11 "Built target core_utils"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target core_utils"
 .PHONY : CMakeFiles/core_utils.dir/all
 
 # Build rule for subdir invocation for target.
@@ -145,7 +117,7 @@ CMakeFiles/core_utils.dir/clean:
 CMakeFiles/specific_message_parsers.dir/all: CMakeFiles/core_utils.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=25,26,27,28,29,30,31 "Built target specific_message_parsers"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=13,14,15,16,17,18,19 "Built target specific_message_parsers"
 .PHONY : CMakeFiles/specific_message_parsers.dir/all
 
 # Build rule for subdir invocation for target.
@@ -172,7 +144,7 @@ CMakeFiles/order_book_lib.dir/all: CMakeFiles/core_utils.dir/all
 CMakeFiles/order_book_lib.dir/all: CMakeFiles/specific_message_parsers.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/order_book_lib.dir/build.make CMakeFiles/order_book_lib.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/order_book_lib.dir/build.make CMakeFiles/order_book_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=18,19 "Built target order_book_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=8,9 "Built target order_book_lib"
 .PHONY : CMakeFiles/order_book_lib.dir/all
 
 # Build rule for subdir invocation for target.
@@ -198,7 +170,7 @@ CMakeFiles/order_book_lib.dir/clean:
 CMakeFiles/taifex_networking_lib.dir/all: CMakeFiles/core_utils.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=34,35,36,37,38 "Built target taifex_networking_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=20,21,22,23,24 "Built target taifex_networking_lib"
 .PHONY : CMakeFiles/taifex_networking_lib.dir/all
 
 # Build rule for subdir invocation for target.
@@ -227,7 +199,7 @@ CMakeFiles/taifex_sdk_lib.dir/all: CMakeFiles/order_book_lib.dir/all
 CMakeFiles/taifex_sdk_lib.dir/all: CMakeFiles/taifex_networking_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_sdk_lib.dir/build.make CMakeFiles/taifex_sdk_lib.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_sdk_lib.dir/build.make CMakeFiles/taifex_sdk_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=39,40 "Built target taifex_sdk_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=25,26 "Built target taifex_sdk_lib"
 .PHONY : CMakeFiles/taifex_sdk_lib.dir/all
 
 # Build rule for subdir invocation for target.
@@ -247,381 +219,6 @@ CMakeFiles/taifex_sdk_lib.dir/clean:
 .PHONY : CMakeFiles/taifex_sdk_lib.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/pack_bcd_tester.dir
-
-# All Build rule for target.
-CMakeFiles/pack_bcd_tester.dir/all: CMakeFiles/core_utils.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pack_bcd_tester.dir/build.make CMakeFiles/pack_bcd_tester.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pack_bcd_tester.dir/build.make CMakeFiles/pack_bcd_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=20,21 "Built target pack_bcd_tester"
-.PHONY : CMakeFiles/pack_bcd_tester.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/pack_bcd_tester.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/pack_bcd_tester.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/pack_bcd_tester.dir/rule
-
-# Convenience name for target.
-pack_bcd_tester: CMakeFiles/pack_bcd_tester.dir/rule
-.PHONY : pack_bcd_tester
-
-# clean rule for target.
-CMakeFiles/pack_bcd_tester.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pack_bcd_tester.dir/build.make CMakeFiles/pack_bcd_tester.dir/clean
-.PHONY : CMakeFiles/pack_bcd_tester.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/checksum_tester.dir
-
-# All Build rule for target.
-CMakeFiles/checksum_tester.dir/all: CMakeFiles/core_utils.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/checksum_tester.dir/build.make CMakeFiles/checksum_tester.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/checksum_tester.dir/build.make CMakeFiles/checksum_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=1,2 "Built target checksum_tester"
-.PHONY : CMakeFiles/checksum_tester.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/checksum_tester.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/checksum_tester.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/checksum_tester.dir/rule
-
-# Convenience name for target.
-checksum_tester: CMakeFiles/checksum_tester.dir/rule
-.PHONY : checksum_tester
-
-# clean rule for target.
-CMakeFiles/checksum_tester.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/checksum_tester.dir/build.make CMakeFiles/checksum_tester.dir/clean
-.PHONY : CMakeFiles/checksum_tester.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/string_utils_tester.dir
-
-# All Build rule for target.
-CMakeFiles/string_utils_tester.dir/all: CMakeFiles/core_utils.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/string_utils_tester.dir/build.make CMakeFiles/string_utils_tester.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/string_utils_tester.dir/build.make CMakeFiles/string_utils_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=32,33 "Built target string_utils_tester"
-.PHONY : CMakeFiles/string_utils_tester.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/string_utils_tester.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/string_utils_tester.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/string_utils_tester.dir/rule
-
-# Convenience name for target.
-string_utils_tester: CMakeFiles/string_utils_tester.dir/rule
-.PHONY : string_utils_tester
-
-# clean rule for target.
-CMakeFiles/string_utils_tester.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/string_utils_tester.dir/build.make CMakeFiles/string_utils_tester.dir/clean
-.PHONY : CMakeFiles/string_utils_tester.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/logger_tester.dir
-
-# All Build rule for target.
-CMakeFiles/logger_tester.dir/all: CMakeFiles/core_utils.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger_tester.dir/build.make CMakeFiles/logger_tester.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger_tester.dir/build.make CMakeFiles/logger_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=14,15 "Built target logger_tester"
-.PHONY : CMakeFiles/logger_tester.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/logger_tester.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/logger_tester.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/logger_tester.dir/rule
-
-# Convenience name for target.
-logger_tester: CMakeFiles/logger_tester.dir/rule
-.PHONY : logger_tester
-
-# clean rule for target.
-CMakeFiles/logger_tester.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger_tester.dir/build.make CMakeFiles/logger_tester.dir/clean
-.PHONY : CMakeFiles/logger_tester.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/error_codes_tester.dir
-
-# All Build rule for target.
-CMakeFiles/error_codes_tester.dir/all: CMakeFiles/core_utils.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/error_codes_tester.dir/build.make CMakeFiles/error_codes_tester.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/error_codes_tester.dir/build.make CMakeFiles/error_codes_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=12,13 "Built target error_codes_tester"
-.PHONY : CMakeFiles/error_codes_tester.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/error_codes_tester.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/error_codes_tester.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/error_codes_tester.dir/rule
-
-# Convenience name for target.
-error_codes_tester: CMakeFiles/error_codes_tester.dir/rule
-.PHONY : error_codes_tester
-
-# clean rule for target.
-CMakeFiles/error_codes_tester.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/error_codes_tester.dir/build.make CMakeFiles/error_codes_tester.dir/clean
-.PHONY : CMakeFiles/error_codes_tester.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/common_header_parser_tester.dir
-
-# All Build rule for target.
-CMakeFiles/common_header_parser_tester.dir/all: CMakeFiles/core_utils.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/common_header_parser_tester.dir/build.make CMakeFiles/common_header_parser_tester.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/common_header_parser_tester.dir/build.make CMakeFiles/common_header_parser_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=3,4 "Built target common_header_parser_tester"
-.PHONY : CMakeFiles/common_header_parser_tester.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/common_header_parser_tester.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/common_header_parser_tester.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/common_header_parser_tester.dir/rule
-
-# Convenience name for target.
-common_header_parser_tester: CMakeFiles/common_header_parser_tester.dir/rule
-.PHONY : common_header_parser_tester
-
-# clean rule for target.
-CMakeFiles/common_header_parser_tester.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/common_header_parser_tester.dir/build.make CMakeFiles/common_header_parser_tester.dir/clean
-.PHONY : CMakeFiles/common_header_parser_tester.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/message_identifier_tester.dir
-
-# All Build rule for target.
-CMakeFiles/message_identifier_tester.dir/all: CMakeFiles/core_utils.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/message_identifier_tester.dir/build.make CMakeFiles/message_identifier_tester.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/message_identifier_tester.dir/build.make CMakeFiles/message_identifier_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=16,17 "Built target message_identifier_tester"
-.PHONY : CMakeFiles/message_identifier_tester.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/message_identifier_tester.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 9
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/message_identifier_tester.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/message_identifier_tester.dir/rule
-
-# Convenience name for target.
-message_identifier_tester: CMakeFiles/message_identifier_tester.dir/rule
-.PHONY : message_identifier_tester
-
-# clean rule for target.
-CMakeFiles/message_identifier_tester.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/message_identifier_tester.dir/build.make CMakeFiles/message_identifier_tester.dir/clean
-.PHONY : CMakeFiles/message_identifier_tester.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/test_message_i010.dir
-
-# All Build rule for target.
-CMakeFiles/test_message_i010.dir/all: CMakeFiles/core_utils.dir/all
-CMakeFiles/test_message_i010.dir/all: CMakeFiles/specific_message_parsers.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i010.dir/build.make CMakeFiles/test_message_i010.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i010.dir/build.make CMakeFiles/test_message_i010.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=45,46 "Built target test_message_i010"
-.PHONY : CMakeFiles/test_message_i010.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/test_message_i010.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 16
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_message_i010.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/test_message_i010.dir/rule
-
-# Convenience name for target.
-test_message_i010: CMakeFiles/test_message_i010.dir/rule
-.PHONY : test_message_i010
-
-# clean rule for target.
-CMakeFiles/test_message_i010.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i010.dir/build.make CMakeFiles/test_message_i010.dir/clean
-.PHONY : CMakeFiles/test_message_i010.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/test_message_i081.dir
-
-# All Build rule for target.
-CMakeFiles/test_message_i081.dir/all: CMakeFiles/core_utils.dir/all
-CMakeFiles/test_message_i081.dir/all: CMakeFiles/specific_message_parsers.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i081.dir/build.make CMakeFiles/test_message_i081.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i081.dir/build.make CMakeFiles/test_message_i081.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=47,48 "Built target test_message_i081"
-.PHONY : CMakeFiles/test_message_i081.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/test_message_i081.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 16
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_message_i081.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/test_message_i081.dir/rule
-
-# Convenience name for target.
-test_message_i081: CMakeFiles/test_message_i081.dir/rule
-.PHONY : test_message_i081
-
-# clean rule for target.
-CMakeFiles/test_message_i081.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i081.dir/build.make CMakeFiles/test_message_i081.dir/clean
-.PHONY : CMakeFiles/test_message_i081.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/test_message_i083.dir
-
-# All Build rule for target.
-CMakeFiles/test_message_i083.dir/all: CMakeFiles/core_utils.dir/all
-CMakeFiles/test_message_i083.dir/all: CMakeFiles/specific_message_parsers.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i083.dir/build.make CMakeFiles/test_message_i083.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i083.dir/build.make CMakeFiles/test_message_i083.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=49,50 "Built target test_message_i083"
-.PHONY : CMakeFiles/test_message_i083.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/test_message_i083.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 16
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_message_i083.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/test_message_i083.dir/rule
-
-# Convenience name for target.
-test_message_i083: CMakeFiles/test_message_i083.dir/rule
-.PHONY : test_message_i083
-
-# clean rule for target.
-CMakeFiles/test_message_i083.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i083.dir/build.make CMakeFiles/test_message_i083.dir/clean
-.PHONY : CMakeFiles/test_message_i083.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/test_message_i001.dir
-
-# All Build rule for target.
-CMakeFiles/test_message_i001.dir/all: CMakeFiles/core_utils.dir/all
-CMakeFiles/test_message_i001.dir/all: CMakeFiles/specific_message_parsers.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i001.dir/build.make CMakeFiles/test_message_i001.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i001.dir/build.make CMakeFiles/test_message_i001.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=41,42 "Built target test_message_i001"
-.PHONY : CMakeFiles/test_message_i001.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/test_message_i001.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 16
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_message_i001.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/test_message_i001.dir/rule
-
-# Convenience name for target.
-test_message_i001: CMakeFiles/test_message_i001.dir/rule
-.PHONY : test_message_i001
-
-# clean rule for target.
-CMakeFiles/test_message_i001.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i001.dir/build.make CMakeFiles/test_message_i001.dir/clean
-.PHONY : CMakeFiles/test_message_i001.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/test_message_i002.dir
-
-# All Build rule for target.
-CMakeFiles/test_message_i002.dir/all: CMakeFiles/core_utils.dir/all
-CMakeFiles/test_message_i002.dir/all: CMakeFiles/specific_message_parsers.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i002.dir/build.make CMakeFiles/test_message_i002.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i002.dir/build.make CMakeFiles/test_message_i002.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=43,44 "Built target test_message_i002"
-.PHONY : CMakeFiles/test_message_i002.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/test_message_i002.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 16
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_message_i002.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/test_message_i002.dir/rule
-
-# Convenience name for target.
-test_message_i002: CMakeFiles/test_message_i002.dir/rule
-.PHONY : test_message_i002
-
-# clean rule for target.
-CMakeFiles/test_message_i002.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i002.dir/build.make CMakeFiles/test_message_i002.dir/clean
-.PHONY : CMakeFiles/test_message_i002.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/test_order_book.dir
-
-# All Build rule for target.
-CMakeFiles/test_order_book.dir/all: CMakeFiles/core_utils.dir/all
-CMakeFiles/test_order_book.dir/all: CMakeFiles/specific_message_parsers.dir/all
-CMakeFiles/test_order_book.dir/all: CMakeFiles/order_book_lib.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_order_book.dir/build.make CMakeFiles/test_order_book.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_order_book.dir/build.make CMakeFiles/test_order_book.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=51,52 "Built target test_order_book"
-.PHONY : CMakeFiles/test_order_book.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/test_order_book.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 18
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_order_book.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/test_order_book.dir/rule
-
-# Convenience name for target.
-test_order_book: CMakeFiles/test_order_book.dir/rule
-.PHONY : test_order_book
-
-# clean rule for target.
-CMakeFiles/test_order_book.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_order_book.dir/build.make CMakeFiles/test_order_book.dir/clean
-.PHONY : CMakeFiles/test_order_book.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/test_taifex_sdk.dir
-
-# All Build rule for target.
-CMakeFiles/test_taifex_sdk.dir/all: CMakeFiles/core_utils.dir/all
-CMakeFiles/test_taifex_sdk.dir/all: CMakeFiles/specific_message_parsers.dir/all
-CMakeFiles/test_taifex_sdk.dir/all: CMakeFiles/order_book_lib.dir/all
-CMakeFiles/test_taifex_sdk.dir/all: CMakeFiles/taifex_networking_lib.dir/all
-CMakeFiles/test_taifex_sdk.dir/all: CMakeFiles/taifex_sdk_lib.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_taifex_sdk.dir/build.make CMakeFiles/test_taifex_sdk.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_taifex_sdk.dir/build.make CMakeFiles/test_taifex_sdk.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=53,54 "Built target test_taifex_sdk"
-.PHONY : CMakeFiles/test_taifex_sdk.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/test_taifex_sdk.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 25
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_taifex_sdk.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
-.PHONY : CMakeFiles/test_taifex_sdk.dir/rule
-
-# Convenience name for target.
-test_taifex_sdk: CMakeFiles/test_taifex_sdk.dir/rule
-.PHONY : test_taifex_sdk
-
-# clean rule for target.
-CMakeFiles/test_taifex_sdk.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_taifex_sdk.dir/build.make CMakeFiles/test_taifex_sdk.dir/clean
-.PHONY : CMakeFiles/test_taifex_sdk.dir/clean
-
-#=============================================================================
 # Target rules for target CMakeFiles/pcap_replay_example.dir
 
 # All Build rule for target.
@@ -632,7 +229,7 @@ CMakeFiles/pcap_replay_example.dir/all: CMakeFiles/taifex_networking_lib.dir/all
 CMakeFiles/pcap_replay_example.dir/all: CMakeFiles/taifex_sdk_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pcap_replay_example.dir/build.make CMakeFiles/pcap_replay_example.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pcap_replay_example.dir/build.make CMakeFiles/pcap_replay_example.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=22,23,24 "Built target pcap_replay_example"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=10,11,12 "Built target pcap_replay_example"
 .PHONY : CMakeFiles/pcap_replay_example.dir/all
 
 # Build rule for subdir invocation for target.
@@ -660,3 +257,4 @@ CMakeFiles/pcap_replay_example.dir/clean:
 cmake_check_build_system:
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
+

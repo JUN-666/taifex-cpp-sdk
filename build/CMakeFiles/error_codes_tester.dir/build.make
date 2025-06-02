@@ -108,3 +108,4 @@ CMakeFiles/error_codes_tester.dir/clean:
 CMakeFiles/error_codes_tester.dir/depend:
 	cd /app/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /app /app /app/build /app/build /app/build/CMakeFiles/error_codes_tester.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/error_codes_tester.dir/depend
+
