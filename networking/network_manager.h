@@ -7,6 +7,7 @@
 #include <map>
 #include <chrono>
 #include <optional>
+#include <atomic>
 
 // Forward declare TaifexSdk to pass pointer
 namespace Taifex {
