@@ -1,6 +1,8 @@
 #include "networking/retransmission_protocol.h"
-#include "networking/endian_utils.h"
-#include "core_utils/logger.h"
+
+#include "networking/endian_utils.h" // For byte order conversions
+#include "logger.h"       // For logging errors
+
 
 #include <vector>
 #include <numeric>
@@ -34,8 +36,10 @@ void StandardTimeFormat::serialize(std::vector<unsigned char>& buffer) const {
 }
 
 bool StandardTimeFormat::deserialize(const unsigned char* data, size_t& offset, size_t total_len) {
+
     if (offset + SIZE > total_len) {
         LOG_ERROR << "StandardTimeFormat deserialize: Not enough data. Required: " << SIZE << ", Available: " << (total_len - offset);
+
         return false;
     }
 
@@ -70,7 +74,9 @@ void RetransmissionMsgHeader::serialize(std::vector<unsigned char>& buffer) cons
 
 bool RetransmissionMsgHeader::deserialize(const unsigned char* data, size_t& offset, size_t total_len) {
     if (offset + SIZE > total_len) {
+
         LOG_ERROR << "RetransmissionMsgHeader deserialize: Not enough data for header. Required: " << SIZE << ", Available: " << (total_len - offset);
+
         return false;
     }
 
@@ -88,7 +94,9 @@ bool RetransmissionMsgHeader::deserialize(const unsigned char* data, size_t& off
 
     if (!msg_time.deserialize(data, offset, total_len)) {
         LOG_ERROR << "RetransmissionMsgHeader deserialize: Failed to parse msg_time.";
+
         return false;
+
     }
     return true;
 }
@@ -102,7 +110,9 @@ void RetransmissionMsgFooter::serialize(std::vector<unsigned char>& buffer, cons
 bool RetransmissionMsgFooter::deserialize(const unsigned char* data, size_t& offset, size_t total_len,
                                           const unsigned char* msg_start_for_checksum, size_t len_for_checksum) {
     if (offset + SIZE > total_len) {
+
         LOG_ERROR << "RetransmissionMsgFooter deserialize: Not enough data for footer. Required: " << SIZE << ", Available: " << (total_len - offset);
+
         return false;
     }
 
@@ -116,7 +126,9 @@ bool RetransmissionMsgFooter::deserialize(const unsigned char* data, size_t& off
     std::span<const unsigned char> checksum_data_uchars(msg_start_for_checksum, len_for_checksum);
     uint8_t calculated = calculate_retransmission_checksum(std::as_bytes(checksum_data_uchars));
     if (calculated != received_checksum) {
+
         LOG_ERROR << "Retransmission checksum mismatch. Calculated: " << static_cast<int>(calculated) << ", Received: " << static_cast<int>(received_checksum);
+
         return false;
     }
     this->check_sum = received_checksum;
@@ -184,17 +196,20 @@ bool LoginRequest020::deserialize(const unsigned char* data, size_t len, const s
     }
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
     if (len < expected_full_msg_len) {
+
         LOG_ERROR << "LoginRequest020 deserialize: Data length too short. Expected: " << expected_full_msg_len << ", Got: " << len;
         return false;
     }
     if (offset + LOGIN_REQUEST_020_PAYLOAD_SIZE > len) {
          LOG_ERROR << "LoginRequest020 deserialize: Not enough data for payload. Required: " << LOGIN_REQUEST_020_PAYLOAD_SIZE << ", Available: " << (len - offset);
+
         return false;
     }
     memcpy(&multiplication_operator, data + offset, sizeof(multiplication_operator));
     offset += sizeof(multiplication_operator);
     multiplication_operator = NetworkingUtils::network_to_host_short(multiplication_operator);
     check_code = data[offset++];
+
     memcpy(&session_id, data + offset, sizeof(session_id));
     offset += sizeof(session_id);
     session_id = NetworkingUtils::network_to_host_short(session_id);
@@ -243,8 +258,10 @@ bool LoginResponse030::deserialize(const unsigned char* data, size_t len) {
         LOG_ERROR << "LoginResponse030: Overall length too short. Expected at least: " << expected_full_msg_len << ", Got: " << len;
         return false;
     }
+
     if (offset + sizeof(channel_id) > len) {
         LOG_ERROR << "LoginResponse030: Not enough data for channel_id. Required: " << sizeof(channel_id) << ", Available: " << (len - offset);
+
         return false;
     }
     memcpy(&channel_id, data + offset, sizeof(channel_id));
@@ -278,8 +295,10 @@ bool RetransmissionStart050::deserialize(const unsigned char* data, size_t len) 
     if (!header.deserialize(data, offset, len)) return false;
     if (header.msg_type != MESSAGE_TYPE) { LOG_ERROR << "RetransmissionStart050: Type mismatch."; return false; }
     if (header.msg_size != RETRANSMISSION_START_050_MSG_SIZE_FIELD_VALUE) { LOG_ERROR << "RetransmissionStart050: Size mismatch."; return false; }
+
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
     if (len < expected_full_msg_len) { LOG_ERROR << "RetransmissionStart050: Overall length too short."; return false; }
+
     if (!footer.deserialize(data, offset, len, data, sizeof(uint16_t) + header.msg_size)) return false;
     return offset == expected_full_msg_len;
 }
@@ -306,8 +325,10 @@ bool ErrorNotification010::deserialize(const unsigned char* data, size_t len) {
     if (!header.deserialize(data, offset, len)) return false;
     if (header.msg_type != MESSAGE_TYPE) { LOG_ERROR << "ErrorNotification010: Type mismatch."; return false; }
     if (header.msg_size != ERROR_NOTIFICATION_010_MSG_SIZE_FIELD_VALUE) { LOG_ERROR << "ErrorNotification010: Size mismatch."; return false; }
+
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
     if (len < expected_full_msg_len) { LOG_ERROR << "ErrorNotification010: Overall length too short."; return false; }
+
     if (offset + sizeof(status_code) > len) {
         LOG_ERROR << "ErrorNotification010: Not enough data for status_code.";
         return false;
@@ -338,8 +359,10 @@ bool HeartbeatServer104::deserialize(const unsigned char* data, size_t len) {
     if (!header.deserialize(data, offset, len)) return false;
     if (header.msg_type != MESSAGE_TYPE) { LOG_ERROR << "HeartbeatServer104: Type mismatch."; return false; }
     if (header.msg_size != HEARTBEAT_SERVER_104_MSG_SIZE_FIELD_VALUE) { LOG_ERROR << "HeartbeatServer104: Size mismatch."; return false; }
+
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
     if (len < expected_full_msg_len) { LOG_ERROR << "HeartbeatServer104: Overall length too short."; return false; }
+
     if (!footer.deserialize(data, offset, len, data, sizeof(uint16_t) + header.msg_size)) return false;
     return offset == expected_full_msg_len;
 }
@@ -365,8 +388,10 @@ bool HeartbeatClient105::deserialize(const unsigned char* data, size_t len) {
     if (!header.deserialize(data, offset, len)) return false;
     if (header.msg_type != MESSAGE_TYPE) { LOG_ERROR << "HeartbeatClient105: Type mismatch."; return false; }
     if (header.msg_size != HEARTBEAT_CLIENT_105_MSG_SIZE_FIELD_VALUE) { LOG_ERROR << "HeartbeatClient105: Size mismatch."; return false; }
+
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
     if (len < expected_full_msg_len) { LOG_ERROR << "HeartbeatClient105: Overall length too short."; return false; }
+
     if (!footer.deserialize(data, offset, len, data, sizeof(uint16_t) + header.msg_size)) return false;
     return offset == expected_full_msg_len;
 }
@@ -398,8 +423,10 @@ bool DataRequest101::deserialize(const unsigned char* data, size_t len) {
     if (!header.deserialize(data, offset, len)) return false;
     if (header.msg_type != MESSAGE_TYPE) { LOG_ERROR << "DataRequest101: Type mismatch."; return false; }
     if (header.msg_size != DATA_REQUEST_101_MSG_SIZE_FIELD_VALUE) { LOG_ERROR << "DataRequest101: Size mismatch."; return false; }
+
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
     if (len < expected_full_msg_len) { LOG_ERROR << "DataRequest101: Overall length too short."; return false; }
+
     if (offset + sizeof(channel_id) > len) return false;
     memcpy(&channel_id, data + offset, sizeof(channel_id));
     offset += sizeof(channel_id);
@@ -452,16 +479,20 @@ bool DataResponse102::deserialize(const unsigned char* data, size_t len, std::ve
     }
     uint16_t base_msg_size_content = (RetransmissionMsgHeader::SIZE - sizeof(uint16_t)) + DATA_RESPONSE_102_FIXED_PAYLOAD_SIZE;
     if (header.msg_size < base_msg_size_content) {
+
         LOG_ERROR << "DataResponse102: msg_size in header (" << header.msg_size << ") too small for fixed part (" << base_msg_size_content << ").";
+
         return false;
     }
     size_t variable_data_len = header.msg_size - base_msg_size_content;
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
     if (len < expected_full_msg_len) {
+
         LOG_ERROR << "DataResponse102: Overall length (" << len << ") too short for declared msg_size. Expected: " << expected_full_msg_len;
         return false;
     }
     if (offset + DATA_RESPONSE_102_FIXED_PAYLOAD_SIZE > len) {
+
         LOG_ERROR << "DataResponse102: Not enough data for fixed payload.";
         return false;
     }
@@ -475,8 +506,10 @@ bool DataResponse102::deserialize(const unsigned char* data, size_t len, std::ve
     memcpy(&recover_num, data + offset, sizeof(recover_num));
     offset += sizeof(recover_num);
     recover_num = NetworkingUtils::network_to_host_short(recover_num);
+
     if (offset + variable_data_len > len) { // Check against overall length 'len'
         LOG_ERROR << "DataResponse102: Not enough data for variable payload part (retransmitted_data). Required: " << variable_data_len << ", Available: " << (len - offset) ;
+
         return false;
     }
     if (variable_data_len > 0) {

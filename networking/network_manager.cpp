@@ -2,8 +2,10 @@
 #include "networking/multicast_receiver.h"
 #include "networking/retransmission_client.h"
 #include "sdk/taifex_sdk.h"
+
 #include "common_header.h" // Removed core_utils/ prefix
 #include "logger.h"        // Removed core_utils/ prefix
+
 #include "networking/retransmission_protocol.h" // For TaifexRetransmission::DataResponse102 etc.
 
 #include <algorithm> // For std::find_if if needed
@@ -19,28 +21,28 @@ NetworkManager::NetworkManager(Taifex::TaifexSdk* sdk_core_logic)
     if (!sdk_core_logic_) {
         // This is a critical error, NetworkManager cannot function without the SDK logic.
         // Consider throwing an exception or ensuring this condition is never met.
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::CRITICAL, "NetworkManager created with null TaifexSdk pointer!");
+        LOG_CRITICAL << "NetworkManager created with null TaifexSdk pointer!";
     }
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "NetworkManager created.");
+    LOG_INFO << "NetworkManager created.";
 }
 
 NetworkManager::~NetworkManager() {
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "NetworkManager shutting down...");
+    LOG_INFO << "NetworkManager shutting down...";
     stop();
 }
 
 bool NetworkManager::configure_and_start(const NetworkManagerConfig& config) {
     if (running_.load()) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "NetworkManager already running. Stop first to reconfigure.");
+        LOG_WARNING << "NetworkManager already running. Stop first to reconfigure.";
         return false;
     }
     config_ = config;
 
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "NetworkManager configuring...");
+    LOG_INFO << "NetworkManager configuring...";
 
     // Setup Multicast Receivers
     if (config_.multicast_feeds.empty()) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "No multicast feeds configured.");
+        LOG_WARNING << "No multicast feeds configured.";
     } else {
         // Primary feed (first in the list)
         const auto& primary_feed_config = config_.multicast_feeds[0];
@@ -50,10 +52,10 @@ bool NetworkManager::configure_and_start(const NetworkManagerConfig& config) {
             }
         );
         if(!primary_multicast_receiver_->add_subscription(primary_feed_config.group_ip, primary_feed_config.port, primary_feed_config.local_interface_ip)) {
-             CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Failed to add subscription for primary multicast feed: " + primary_feed_config.group_ip);
+             LOG_ERROR << "Failed to add subscription for primary multicast feed: " << primary_feed_config.group_ip;
              primary_multicast_receiver_.reset(); // Nullify if add_subscription failed
         } else {
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "Configured primary multicast feed: " + primary_feed_config.group_ip);
+            LOG_INFO << "Configured primary multicast feed: " << primary_feed_config.group_ip;
         }
 
 
@@ -65,13 +67,13 @@ bool NetworkManager::configure_and_start(const NetworkManagerConfig& config) {
                 }
             );
             if(!secondary_multicast_receiver_->add_subscription(secondary_feed_config.group_ip, secondary_feed_config.port, secondary_feed_config.local_interface_ip)) {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Failed to add subscription for secondary multicast feed: " + secondary_feed_config.group_ip);
+                LOG_ERROR << "Failed to add subscription for secondary multicast feed: " << secondary_feed_config.group_ip;
                 secondary_multicast_receiver_.reset();
             } else {
-                 CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "Configured secondary multicast feed: " + secondary_feed_config.group_ip);
+                 LOG_INFO << "Configured secondary multicast feed: " << secondary_feed_config.group_ip;
             }
         } else if (config_.dual_feed_enabled && config_.multicast_feeds.size() <= 1) {
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "Dual feed enabled but only one or zero multicast feeds configured.");
+            LOG_WARNING << "Dual feed enabled but only one or zero multicast feeds configured.";
         }
     }
 
@@ -86,7 +88,7 @@ bool NetworkManager::configure_and_start(const NetworkManagerConfig& config) {
         if (primary_multicast_receiver_->start()) {
             primary_started = true;
         } else {
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Failed to start primary multicast receiver.");
+            LOG_ERROR << "Failed to start primary multicast receiver.";
             running_ = false;
         }
     }
@@ -96,7 +98,7 @@ bool NetworkManager::configure_and_start(const NetworkManagerConfig& config) {
         if (secondary_multicast_receiver_->start()) {
             secondary_started = true;
         } else {
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Failed to start secondary multicast receiver. Continuing with primary if available.");
+            LOG_ERROR << "Failed to start secondary multicast receiver. Continuing with primary if available.";
             // Not setting running_ to false, can operate in single feed mode
         }
     }
@@ -105,11 +107,11 @@ bool NetworkManager::configure_and_start(const NetworkManagerConfig& config) {
     // Its start method internally launches a thread that tries to connect and login.
 
     if (!primary_started && !secondary_started && !retransmission_client_) { // No data sources configured or started
-         CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "NetworkManager started but no functional data sources (multicast/retransmission).");
+         LOG_WARNING << "NetworkManager started but no functional data sources (multicast/retransmission).";
          // running_ might still be true if retransmission was configured but start is async.
          // If primary multicast was configured but failed, running_ would be false.
     } else if (!running_.load()){
-         CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "NetworkManager failed to start essential components.");
+         LOG_ERROR << "NetworkManager failed to start essential components.";
          // cleanup partially started components
          if (primary_multicast_receiver_ && primary_started) primary_multicast_receiver_->stop();
          if (secondary_multicast_receiver_ && secondary_started) secondary_multicast_receiver_->stop();
@@ -117,7 +119,7 @@ bool NetworkManager::configure_and_start(const NetworkManagerConfig& config) {
          return false;
     }
 
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "NetworkManager started.");
+    LOG_INFO << "NetworkManager started.";
     return running_.load();
 }
 
@@ -126,7 +128,7 @@ void NetworkManager::stop() {
     if (!running_.exchange(false)) { // Set to false and get previous value
         return;
     }
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "NetworkManager stopping...");
+    LOG_INFO << "NetworkManager stopping...";
     if (primary_multicast_receiver_) {
         primary_multicast_receiver_->stop();
     }
@@ -136,7 +138,7 @@ void NetworkManager::stop() {
     if (retransmission_client_) {
         retransmission_client_->stop();
     }
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "NetworkManager stopped.");
+    LOG_INFO << "NetworkManager stopped.";
 }
 
 void NetworkManager::on_primary_multicast_data(const unsigned char* data, size_t length,
@@ -155,7 +157,7 @@ void NetworkManager::process_incoming_packet(const unsigned char* data, size_t l
 
     CoreUtils::CommonHeader header;
     if (!CoreUtils::CommonHeader::parse(data, length, header)) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "NM: Dropping packet - failed to parse common header. Source: " + (is_retransmitted ? "Retrans" : (is_from_primary_feed ? "PrimaryMC" : "SecondaryMC")));
+        LOG_WARNING << "NM: Dropping packet - failed to parse common header. Source: " << (is_retransmitted ? "Retrans" : (is_from_primary_feed ? "PrimaryMC" : "SecondaryMC"));
         return;
     }
     uint32_t channel_id = header.getChannelId();
@@ -169,8 +171,8 @@ void NetworkManager::process_incoming_packet(const unsigned char* data, size_t l
         if (it != deduplication_log_.end()) {
             // Optional: Check timestamp if it's within a very small window of the first arrival to allow for network jitter
             // if (now - it->second < DEDUPLICATION_TIME_WINDOW_MS) { // Example time window check
-                 CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "NM: Duplicate packet on Channel " + std::to_string(channel_id) +
-                                   " Seq " + std::to_string(channel_seq) + " from " + (is_from_primary_feed ? "primary" : "secondary") + ". Discarding.");
+                 LOG_DEBUG << "NM: Duplicate packet on Channel " << channel_id <<
+                                   " Seq " << channel_seq << " from " << (is_from_primary_feed ? "primary" : "secondary") << ". Discarding.";
                 return;
             // } else {
             //     // Seen before but outside time window, treat as new (or log as stale duplicate)
@@ -192,7 +194,7 @@ void NetworkManager::process_incoming_packet(const unsigned char* data, size_t l
 
 void NetworkManager::on_retransmitted_market_data(const unsigned char* data, size_t length) {
     if (!running_.load() || !sdk_core_logic_) return;
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "NM: Received retransmitted market data (len: " + std::to_string(length) + ")");
+    LOG_DEBUG << "NM: Received retransmitted market data (len: " << length << ")";
     process_incoming_packet(data, length, false /*is_primary, doesn't matter*/, true /*is_retransmitted*/);
 }
 
@@ -205,19 +207,19 @@ void NetworkManager::forward_to_sdk(const unsigned char* data, size_t length) {
 
 void NetworkManager::trigger_retransmission_request(uint16_t channel_id, uint32_t start_seq_num, uint16_t count) {
     if (!running_.load()) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "NM: Cannot trigger retransmission, NetworkManager not running.");
+        LOG_WARNING << "NM: Cannot trigger retransmission, NetworkManager not running.";
         return;
     }
     if (retransmission_client_) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "NM: Triggering retransmission for Channel " + std::to_string(channel_id) +
-                               " from Seq " + std::to_string(start_seq_num) + ", Count " + std::to_string(count));
+        LOG_INFO << "NM: Triggering retransmission for Channel " << channel_id <<
+                               " from Seq " << start_seq_num << ", Count " << count;
         if(!retransmission_client_->request_retransmission(channel_id, start_seq_num, count)) {
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "NM: Failed to send retransmission request. Client might not be logged in or connected.");
+            LOG_WARNING << "NM: Failed to send retransmission request. Client might not be logged in or connected.";
             // Optionally, try to connect/login retransmission client again if it's not in a good state
             // This could be complex if the client is already in its reconnect loop.
         }
     } else {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "NM: Retransmission client not configured, cannot request retransmission.");
+        LOG_WARNING << "NM: Retransmission client not configured, cannot request retransmission.";
     }
 }
 
@@ -235,41 +237,41 @@ void NetworkManager::connect_retransmission_client(bool use_primary_server) {
             [this](const TaifexRetransmission::DataResponse102& resp, const std::vector<unsigned char>& retrans_data) { this->on_retransmission_status(resp); }, // Adjusted for new sig
             [this](const TaifexRetransmission::ErrorNotification010& err_msg) { this->on_retransmission_error(err_msg); }, // Adjusted
             [this]() { this->on_retransmission_disconnected(); },
-            [this]() { CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "NM: Retransmission client logged in to " + (retrans_primary_active_ ? "primary" : "backup") + " server.");}
+            [this]() { LOG_INFO << "NM: Retransmission client logged in to " << (retrans_primary_active_ ? "primary" : "backup") << " server.";}
         );
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "NM: Configured " + server_type + " retransmission server: " + server_config_opt->ip);
+        LOG_INFO << "NM: Configured " << server_type << " retransmission server: " << server_config_opt->ip;
         if (!retransmission_client_->start()) {
-             CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "NM: Failed to start retransmission client for " + server_type + " server.");
+             LOG_ERROR << "NM: Failed to start retransmission client for " << server_type << " server.";
         }
     } else {
-         CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "NM: No " + server_type + " retransmission server configured.");
+         LOG_WARNING << "NM: No " << server_type << " retransmission server configured.";
     }
 }
 
 
 // Other callback implementations (on_retransmission_status, etc.)
 void NetworkManager::on_retransmission_status(const TaifexRetransmission::DataResponse102& response) { // Added retrans_data
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "NM: Retransmission status update. Channel: " + std::to_string(response.channel_id) +
-                           ", Status: " + std::to_string(response.status_code) +
-                           ", BeginSeq: " + std::to_string(response.begin_seq_no) +
-                           ", RecoverNum: " + std::to_string(response.recover_num));
+    LOG_INFO << "NM: Retransmission status update. Channel: " << response.channel_id <<
+                           ", Status: " << response.status_code <<
+                           ", BeginSeq: " << response.begin_seq_no <<
+                           ", RecoverNum: " << response.recover_num;
     // If DataResponse102 status indicates an error (e.g. "no data", "request error"),
     // this might be where logic to switch to a backup retransmission server could be triggered,
     // or to notify the application layer of failure to recover.
 }
 
 void NetworkManager::on_retransmission_error(const TaifexRetransmission::ErrorNotification010& error_msg) { // Changed to take struct
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "NM: Retransmission client error notification. Status Code: " + std::to_string(error_msg.status_code));
+    LOG_ERROR << "NM: Retransmission client error notification. Status Code: " << error_msg.status_code;
     // ErrorNotification 010 from server usually means server will disconnect.
     // RetransmissionClient's receive_loop should detect this and call on_retransmission_disconnected.
 }
 
 void NetworkManager::on_retransmission_disconnected() {
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "NM: Retransmission client disconnected.");
+    LOG_WARNING << "NM: Retransmission client disconnected.";
     // Simple strategy: if primary was active and backup is configured, try switching to backup.
     // More complex logic would involve retry counts, timers, etc.
     if (retrans_primary_active_ && config_.backup_retrans_server) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "NM: Primary retransmission server disconnected. Attempting to switch to backup.");
+        LOG_INFO << "NM: Primary retransmission server disconnected. Attempting to switch to backup.";
         if (retransmission_client_) { // Stop existing client first
             retransmission_client_->stop();
         }
@@ -277,7 +279,7 @@ void NetworkManager::on_retransmission_disconnected() {
         connect_retransmission_client(retrans_primary_active_);
     } else if (!retrans_primary_active_ && config_.primary_retrans_server) {
         // Was on backup, try switching back to primary (or just keep retrying current one via its internal loop)
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "NM: Backup retransmission server disconnected. RetransmissionClient will attempt to reconnect.");
+        LOG_INFO << "NM: Backup retransmission server disconnected. RetransmissionClient will attempt to reconnect.";
         // RetransmissionClient's own receive_loop will try to reconnect to its configured server.
         // If we want NetworkManager to manage failover back to primary, more state is needed.
     }

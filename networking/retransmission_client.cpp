@@ -1,6 +1,8 @@
 #include "networking/retransmission_client.h"
 #include "networking/endian_utils.h"
+
 #include "logger.h" // Removed core_utils/ prefix
+
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -10,6 +12,9 @@
 #include <cstring>  // For memset, strerror, memcpy
 #include <cerrno>   // For errno
 #include <chrono>   // For sleep, system_clock
+
+#include "common_header.h"     // For parsing retransmitted market data headers
+#include "message_identifier.h"// For identifying market data message types if needed
 
 namespace Networking {
 
@@ -40,11 +45,11 @@ RetransmissionClient::RetransmissionClient(
       connected_(false),
       logged_in_(false),
       client_msg_seq_num_(0) {
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient created for " + server_ip_ + ":" + std::to_string(server_port_));
+    LOG_INFO << "RetransmissionClient created for " << server_ip_ << ":" << server_port_;
 }
 
 RetransmissionClient::~RetransmissionClient() {
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient for " + server_ip_ + " shutting down...");
+    LOG_INFO << "RetransmissionClient for " << server_ip_ << " shutting down...";
     stop();
 }
 
@@ -61,7 +66,7 @@ bool RetransmissionClient::connect_to_server() {
 
     socket_fd_ = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_fd_ < 0) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: Failed to create TCP socket: " + std::string(strerror(errno)));
+        LOG_ERROR << "RetransmissionClient: Failed to create TCP socket: " << strerror(errno);
         return false;
     }
 
@@ -70,15 +75,15 @@ bool RetransmissionClient::connect_to_server() {
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(server_port_);
     if (inet_pton(AF_INET, server_ip_.c_str(), &serv_addr.sin_addr) <= 0) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: Invalid server IP address: " + server_ip_);
+        LOG_ERROR << "RetransmissionClient: Invalid server IP address: " << server_ip_;
         close(socket_fd_);
         socket_fd_ = -1;
         return false;
     }
 
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Connecting to " + server_ip_ + ":" + std::to_string(server_port_) + "...");
+    LOG_INFO << "RetransmissionClient: Connecting to " << server_ip_ << ":" << server_port_ << "...";
     if (connect(socket_fd_, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: Connection failed to " + server_ip_ + ":" + std::to_string(server_port_) + ": " + std::string(strerror(errno)));
+        LOG_ERROR << "RetransmissionClient: Connection failed to " << server_ip_ << ":" << server_port_ << ": " << strerror(errno);
         close(socket_fd_);
         socket_fd_ = -1;
         return false;
@@ -88,21 +93,21 @@ bool RetransmissionClient::connect_to_server() {
     tv.tv_sec = DEFAULT_RECV_TIMEOUT_SEC;
     tv.tv_usec = 0;
     if (setsockopt(socket_fd_, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv) < 0) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "RetransmissionClient: Failed to set SO_RCVTIMEO. Recv calls may block longer than expected.");
+        LOG_WARNING << "RetransmissionClient: Failed to set SO_RCVTIMEO. Recv calls may block longer than expected.";
     }
 
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Connected successfully to " + server_ip_ + ":" + std::to_string(server_port_));
+    LOG_INFO << "RetransmissionClient: Connected successfully to " << server_ip_ << ":" << server_port_;
     connected_ = true;
     return true;
 }
 
 bool RetransmissionClient::perform_login() {
     if (!connected_.load()) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "RetransmissionClient: Not connected, cannot perform login.");
+        LOG_WARNING << "RetransmissionClient: Not connected, cannot perform login.";
         return false;
     }
     if (logged_in_.load()) {
-         CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Already logged in.");
+         LOG_INFO << "RetransmissionClient: Already logged in.";
         return true;
     }
 
@@ -126,7 +131,7 @@ bool RetransmissionClient::perform_login() {
     std::vector<unsigned char> buffer;
     login_req.serialize(buffer, password_);
 
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Sending LoginRequest020 (MsgSeq: " + std::to_string(login_req.header.msg_seq_num) + ")");
+    LOG_INFO << "RetransmissionClient: Sending LoginRequest020 (MsgSeq: " << login_req.header.msg_seq_num << ")";
     send_tcp_message(buffer);
 
     return true;
@@ -135,7 +140,7 @@ bool RetransmissionClient::perform_login() {
 
 void RetransmissionClient::send_tcp_message(const std::vector<unsigned char>& message_bytes) {
     if (!connected_.load() || socket_fd_ < 0) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: Not connected, cannot send message.");
+        LOG_ERROR << "RetransmissionClient: Not connected, cannot send message.";
         // error_callback_ might be too strong here, as it's for protocol errors. Disconnected is more appropriate.
         // If not connected, the receive_loop should handle invoking disconnected_callback_.
         return;
@@ -148,7 +153,7 @@ void RetransmissionClient::send_tcp_message(const std::vector<unsigned char>& me
     while (total_sent < message_bytes.size()) {
         ssize_t sent_this_call = send(socket_fd_, data_ptr + total_sent, remaining, 0);
         if (sent_this_call < 0) {
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: send() error: " + std::string(strerror(errno)));
+            LOG_ERROR << "RetransmissionClient: send() error: " << strerror(errno);
             close(socket_fd_); // Close socket on send error
             socket_fd_ = -1;
             connected_ = false;
@@ -157,7 +162,7 @@ void RetransmissionClient::send_tcp_message(const std::vector<unsigned char>& me
             return;
         }
         if (sent_this_call == 0) { // Should not happen with blocking socket unless error
-             CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: send() returned 0, treating as disconnect.");
+             LOG_ERROR << "RetransmissionClient: send() returned 0, treating as disconnect.";
             close(socket_fd_);
             socket_fd_ = -1;
             connected_ = false;
@@ -168,25 +173,25 @@ void RetransmissionClient::send_tcp_message(const std::vector<unsigned char>& me
         total_sent += sent_this_call;
         remaining -= sent_this_call;
     }
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "RetransmissionClient: Sent " + std::to_string(total_sent) + " bytes.");
+    LOG_DEBUG << "RetransmissionClient: Sent " << total_sent << " bytes.";
 }
 
 
 void RetransmissionClient::receive_loop() {
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Receive loop started for " + server_ip_);
+    LOG_INFO << "RetransmissionClient: Receive loop started for " << server_ip_;
     const size_t RECV_BUFFER_SIZE = 8192;
     std::vector<unsigned char> temp_recv_buf(RECV_BUFFER_SIZE);
 
     while (running_.load()) {
         if (!connected_.load() || socket_fd_ < 0) {
             if (!running_.load()) break;
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Not connected. Attempting to reconnect...");
+            LOG_INFO << "RetransmissionClient: Not connected. Attempting to reconnect...";
             std::this_thread::sleep_for(std::chrono::seconds(5));
             if (!connect_to_server()) {
                 continue;
             }
             if (!perform_login()) {
-                 CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "RetransmissionClient: Re-login attempt initiated, awaiting response.");
+                 LOG_WARNING << "RetransmissionClient: Re-login attempt initiated, awaiting response.";
             }
         }
 
@@ -204,10 +209,10 @@ void RetransmissionClient::receive_loop() {
                 continue;
             }
             if (!running_.load() && (errno == EINTR || errno == EBADF)) {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: recv interrupted or socket closed, likely due to stop().");
+                LOG_INFO << "RetransmissionClient: recv interrupted or socket closed, likely due to stop().";
                 break;
             }
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: recv() error: " + std::string(strerror(errno)));
+            LOG_ERROR << "RetransmissionClient: recv() error: " << strerror(errno);
             close(socket_fd_);
             socket_fd_ = -1;
             connected_ = false;
@@ -217,7 +222,7 @@ void RetransmissionClient::receive_loop() {
         }
 
         if (bytes_received == 0) {
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Server closed connection.");
+            LOG_INFO << "RetransmissionClient: Server closed connection.";
             close(socket_fd_);
             socket_fd_ = -1;
             connected_ = false;
@@ -231,18 +236,18 @@ void RetransmissionClient::receive_loop() {
             process_incoming_data(temp_recv_buf.data(), static_cast<size_t>(bytes_received));
         }
     }
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Receive loop ended for " + server_ip_);
+    LOG_INFO << "RetransmissionClient: Receive loop ended for " << server_ip_;
 }
 
 
 bool RetransmissionClient::start() {
     if (running_.exchange(true)) { // Set to true and get previous value
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "RetransmissionClient: Already running or start signal sent.");
+        LOG_WARNING << "RetransmissionClient: Already running or start signal sent.";
         return true;
     }
     // Thread will handle connect and login sequence
     client_thread_ = std::make_unique<std::thread>(&RetransmissionClient::receive_loop, this);
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Started and attempting connection/login.");
+    LOG_INFO << "RetransmissionClient: Started and attempting connection/login.";
     return true;
 }
 
@@ -250,7 +255,7 @@ void RetransmissionClient::stop() {
     if (!running_.exchange(false)) { // Set to false and get previous value
         return; // Already stopped or stop signal sent
     }
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Stopping...");
+    LOG_INFO << "RetransmissionClient: Stopping...";
 
     if (socket_fd_ >= 0) {
         // No need for shutdown() typically before close() for client sockets unless specific linger options are set.
@@ -265,20 +270,14 @@ void RetransmissionClient::stop() {
 
     connected_ = false;
     logged_in_ = false;
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Stopped.");
+    LOG_INFO << "RetransmissionClient: Stopped.";
 }
-
-#include "core_utils/common_header.h"     // For parsing retransmitted market data headers
-#include "core_utils/message_identifier.h"// For identifying market data message types if needed
-
-
-namespace Networking {
 
 // ... (constructor, destructor, connect_to_server, perform_login, send_tcp_message, start, stop, receive_loop) ...
 
 bool RetransmissionClient::request_retransmission(uint16_t channel_id, uint32_t begin_seq_no, uint16_t count) {
     if (!logged_in_.load()) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "RetransmissionClient: Not logged in, cannot send DataRequest101.");
+        LOG_WARNING << "RetransmissionClient: Not logged in, cannot send DataRequest101.";
         // error_callback_ might be too generic here. This is a client-side state issue.
         // Consider just returning false or logging. For now, let's not call error_callback_.
         return false;
@@ -300,15 +299,15 @@ bool RetransmissionClient::request_retransmission(uint16_t channel_id, uint32_t 
     std::vector<unsigned char> buffer;
     req.serialize(buffer);
 
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Sending DataRequest101 (ClientMsgSeq: " + std::to_string(req.header.msg_seq_num) +
-                           ", Channel: " + std::to_string(channel_id) + ", Begin: " + std::to_string(begin_seq_no) + ", Count: " + std::to_string(count) + ")");
+    LOG_INFO << "RetransmissionClient: Sending DataRequest101 (ClientMsgSeq: " << req.header.msg_seq_num <<
+                           ", Channel: " << channel_id << ", Begin: " << begin_seq_no << ", Count: " << count << ")";
     send_tcp_message(buffer);
     return true;
 }
 
 bool RetransmissionClient::send_client_heartbeat() { // Renamed for clarity in header
     if (!connected_.load()) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "RetransmissionClient: Not connected, cannot send HeartbeatClient105.");
+        LOG_WARNING << "RetransmissionClient: Not connected, cannot send HeartbeatClient105.";
         return false;
     }
 
@@ -324,7 +323,7 @@ bool RetransmissionClient::send_client_heartbeat() { // Renamed for clarity in h
     std::vector<unsigned char> buffer;
     hb_resp.serialize(buffer);
 
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Sending HeartbeatClient105 (ClientMsgSeq: " + std::to_string(hb_resp.header.msg_seq_num) + ")");
+    LOG_INFO << "RetransmissionClient: Sending HeartbeatClient105 (ClientMsgSeq: " << hb_resp.header.msg_seq_num << ")";
     send_tcp_message(buffer);
     return true;
 }
@@ -338,7 +337,7 @@ void RetransmissionClient::process_incoming_data(const unsigned char* data_chunk
 
         if (current_data[0] == 0x1B) { // Potential Market Data Message (starts with ESC)
             if (current_size < CoreUtils::CommonHeader::HEADER_SIZE) {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "RetransmissionClient: Buffer has 0x1B but not enough data for market data header. Size: " + std::to_string(current_size));
+                LOG_DEBUG << "RetransmissionClient: Buffer has 0x1B but not enough data for market data header. Size: " << current_size;
                 break;
             }
             CoreUtils::CommonHeader market_header;
@@ -350,25 +349,25 @@ void RetransmissionClient::process_incoming_data(const unsigned char* data_chunk
                 size_t full_market_msg_len = CoreUtils::CommonHeader::HEADER_SIZE + market_body_len + 1 + 2; // +checksum+term_code
 
                 if (current_size >= full_market_msg_len) {
-                    CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "RetransmissionClient: Received retransmitted market data message (len: " + std::to_string(full_market_msg_len) + ")");
+                    LOG_DEBUG << "RetransmissionClient: Received retransmitted market data message (len: " << full_market_msg_len << ")";
                     if (market_data_callback_) {
                         market_data_callback_(current_data, full_market_msg_len);
                     }
                     tcp_receive_buffer_.erase(tcp_receive_buffer_.begin(), tcp_receive_buffer_.begin() + full_market_msg_len);
                     continue;
                 } else {
-                    CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "RetransmissionClient: Buffer has market data header, but needs more data for full message. Have: " + std::to_string(current_size) + ", Need: " + std::to_string(full_market_msg_len));
+                    LOG_DEBUG << "RetransmissionClient: Buffer has market data header, but needs more data for full message. Have: " << current_size << ", Need: " << full_market_msg_len;
                     break;
                 }
             } else {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: Data starts with 0x1B but not a valid market data header. Buffer size: " + std::to_string(current_size) + ". Clearing buffer to prevent loop.");
+                LOG_ERROR << "RetransmissionClient: Data starts with 0x1B but not a valid market data header. Buffer size: " << current_size << ". Clearing buffer to prevent loop.";
                 tcp_receive_buffer_.clear();
                 break;
             }
         } else { // Assume Retransmission Protocol Message
             // Need at least enough for the MsgSize field of the retransmission header to know message length.
             if (current_size < sizeof(uint16_t)) { // sizeof(RetransmissionMsgHeader::msg_size)
-                 CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "RetransmissionClient: Buffer too small for even retrans MsgSize field. Size: " + std::to_string(current_size));
+                 LOG_DEBUG << "RetransmissionClient: Buffer too small for even retrans MsgSize field. Size: " << current_size;
                 break;
             }
 
@@ -388,7 +387,7 @@ void RetransmissionClient::process_incoming_data(const unsigned char* data_chunk
                 // ensuring it doesn't read past what we know is a full message or buffer end.
                 // Since we determined expected_retrans_msg_len is available, use that.
                 if (!retrans_header.deserialize(current_data, temp_offset, expected_retrans_msg_len)) {
-                     CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: Failed to deserialize retransmission message header from complete segment.");
+                     LOG_ERROR << "RetransmissionClient: Failed to deserialize retransmission message header from complete segment.";
                      tcp_receive_buffer_.erase(tcp_receive_buffer_.begin(), tcp_receive_buffer_.begin() + expected_retrans_msg_len); // Remove malformed part
                      continue; // Try next message if any
                 }
@@ -399,7 +398,7 @@ void RetransmissionClient::process_incoming_data(const unsigned char* data_chunk
                 tcp_receive_buffer_.erase(tcp_receive_buffer_.begin(), tcp_receive_buffer_.begin() + expected_retrans_msg_len);
                 continue;
             } else {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "RetransmissionClient: Buffer has start of retrans message, but needs more data. Have: " + std::to_string(current_size) + ", Need: " + std::to_string(expected_retrans_msg_len));
+                LOG_DEBUG << "RetransmissionClient: Buffer has start of retrans message, but needs more data. Have: " << current_size << ", Need: " << expected_retrans_msg_len;
                 break;
             }
         }
@@ -410,26 +409,26 @@ void RetransmissionClient::handle_protocol_message(
     const TaifexRetransmission::RetransmissionMsgHeader& temp_parsed_header,
     const unsigned char* full_message_data, size_t full_message_length) {
 
-    CoreUtils::Logger::Log(CoreUtils::LogLevel::DEBUG, "RetransmissionClient: Handling protocol message type: " + std::to_string(temp_parsed_header.msg_type));
+    LOG_DEBUG << "RetransmissionClient: Handling protocol message type: " << temp_parsed_header.msg_type;
 
     switch (temp_parsed_header.msg_type) {
         case TaifexRetransmission::LoginResponse030::MESSAGE_TYPE: {
             TaifexRetransmission::LoginResponse030 msg;
             if (msg.deserialize(full_message_data, full_message_length)) {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Received LoginResponse030 for ChannelID: " + std::to_string(msg.channel_id));
+                LOG_INFO << "RetransmissionClient: Received LoginResponse030 for ChannelID: " << msg.channel_id;
             } else {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: Failed to deserialize LoginResponse030.");
+                LOG_ERROR << "RetransmissionClient: Failed to deserialize LoginResponse030.";
             }
             break;
         }
         case TaifexRetransmission::RetransmissionStart050::MESSAGE_TYPE: {
             TaifexRetransmission::RetransmissionStart050 msg;
             if (msg.deserialize(full_message_data, full_message_length)) {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Received RetransmissionStart050. Login successful.");
+                LOG_INFO << "RetransmissionClient: Received RetransmissionStart050. Login successful.";
                 logged_in_ = true;
                 if (logged_in_callback_) logged_in_callback_();
             } else {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: Failed to deserialize RetransmissionStart050.");
+                LOG_ERROR << "RetransmissionClient: Failed to deserialize RetransmissionStart050.";
             }
             break;
         }
@@ -438,40 +437,40 @@ void RetransmissionClient::handle_protocol_message(
             std::vector<unsigned char> retransmitted_data_payload; // To store variable part
             // Pass password_ as empty string as it's not used by DataResponse102::deserialize
             if (msg.deserialize(full_message_data, full_message_length, retransmitted_data_payload)) {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Received DataResponse102. Status: " + std::to_string(msg.status_code) +
-                                       " for Channel: " + std::to_string(msg.channel_id) + ", BeginSeq: " + std::to_string(msg.begin_seq_no) +
-                                       ", Retransmitted data size: " + std::to_string(retransmitted_data_payload.size()));
+                LOG_INFO << "RetransmissionClient: Received DataResponse102. Status: " << msg.status_code <<
+                                       " for Channel: " << msg.channel_id << ", BeginSeq: " << msg.begin_seq_no <<
+                                       ", Retransmitted data size: " << retransmitted_data_payload.size();
                 if (status_callback_) status_callback_(msg, retransmitted_data_payload);
                 // After DataResponse102 with status 0, server sends market data messages directly (0x1B type).
                 // These will be handled by the market data path in process_incoming_data.
             } else {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: Failed to deserialize DataResponse102.");
+                LOG_ERROR << "RetransmissionClient: Failed to deserialize DataResponse102.";
             }
             break;
         }
         case TaifexRetransmission::HeartbeatServer104::MESSAGE_TYPE: {
             TaifexRetransmission::HeartbeatServer104 msg;
              if (msg.deserialize(full_message_data, full_message_length)) {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::INFO, "RetransmissionClient: Received HeartbeatServer104. Sending response.");
+                LOG_INFO << "RetransmissionClient: Received HeartbeatServer104. Sending response.";
                 send_client_heartbeat();
             } else {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: Failed to deserialize HeartbeatServer104.");
+                LOG_ERROR << "RetransmissionClient: Failed to deserialize HeartbeatServer104.";
             }
             break;
         }
         case TaifexRetransmission::ErrorNotification010::MESSAGE_TYPE: {
             TaifexRetransmission::ErrorNotification010 msg;
             if (msg.deserialize(full_message_data, full_message_length)) {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: Received ErrorNotification010. Status: " + std::to_string(msg.status_code));
+                LOG_ERROR << "RetransmissionClient: Received ErrorNotification010. Status: " << msg.status_code;
                 if (error_callback_) error_callback_(msg); // Changed to pass struct
                 logged_in_ = false;
             } else {
-                CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionClient: Failed to deserialize ErrorNotification010.");
+                LOG_ERROR << "RetransmissionClient: Failed to deserialize ErrorNotification010.";
             }
             break;
         }
         default:
-            CoreUtils::Logger::Log(CoreUtils::LogLevel::WARNING, "RetransmissionClient: Received unknown retransmission protocol message type: " + std::to_string(temp_parsed_header.msg_type));
+            LOG_WARNING << "RetransmissionClient: Received unknown retransmission protocol message type: " << temp_parsed_header.msg_type;
             break;
     }
 }
