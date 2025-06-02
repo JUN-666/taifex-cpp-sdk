@@ -268,8 +268,8 @@ void RetransmissionClient::stop() {
     LOG_INFO << "RetransmissionClient: Stopped.";
 }
 
-#include "core_utils/common_header.h"     // For parsing retransmitted market data headers
-#include "core_utils/message_identifier.h"// For identifying market data message types if needed
+#include "common_header.h"     // For parsing retransmitted market data headers
+#include "message_identifier.h"// For identifying market data message types if needed
 
 
 namespace Networking {
