@@ -10,6 +10,14 @@
 using namespace OrderBookManagement;
 using namespace SpecificMessageParsers;
 
+// Forward declarations for test functions defined after main()
+void test_apply_update_new();
+void test_apply_update_change();
+void test_apply_update_delete();
+void test_apply_update_overlay_derived();
+void test_apply_update_sequential();
+void test_apply_update_sequence_number();
+
 // Helper to create a MessageI010 with a specific decimal locator for tests
 // Not strictly needed if OrderBook constructor takes decimal_locator directly
 // and message structs contain already scaled prices.
