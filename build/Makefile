@@ -97,7 +97,7 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Available install components are: \"Devel\" \"Unspecified\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Available install components are: \"Unspecified\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
@@ -183,6 +183,58 @@ core_utils: cmake_check_build_system
 core_utils/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/build
 .PHONY : core_utils/fast
+
+#=============================================================================
+# Target rules for targets named specific_message_parsers
+
+# Build rule for target.
+specific_message_parsers: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 specific_message_parsers
+.PHONY : specific_message_parsers
+
+# fast build rule for target.
+specific_message_parsers/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/build
+.PHONY : specific_message_parsers/fast
+
+#=============================================================================
+# Target rules for targets named order_book_lib
+
+# Build rule for target.
+order_book_lib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 order_book_lib
+.PHONY : order_book_lib
+
+# fast build rule for target.
+order_book_lib/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/order_book_lib.dir/build.make CMakeFiles/order_book_lib.dir/build
+.PHONY : order_book_lib/fast
+
+#=============================================================================
+# Target rules for targets named taifex_networking_lib
+
+# Build rule for target.
+taifex_networking_lib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 taifex_networking_lib
+.PHONY : taifex_networking_lib
+
+# fast build rule for target.
+taifex_networking_lib/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/build
+.PHONY : taifex_networking_lib/fast
+
+#=============================================================================
+# Target rules for targets named taifex_sdk_lib
+
+# Build rule for target.
+taifex_sdk_lib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 taifex_sdk_lib
+.PHONY : taifex_sdk_lib
+
+# fast build rule for target.
+taifex_sdk_lib/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_sdk_lib.dir/build.make CMakeFiles/taifex_sdk_lib.dir/build
+.PHONY : taifex_sdk_lib/fast
 
 #=============================================================================
 # Target rules for targets named pack_bcd_tester
@@ -275,6 +327,110 @@ message_identifier_tester/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/message_identifier_tester.dir/build.make CMakeFiles/message_identifier_tester.dir/build
 .PHONY : message_identifier_tester/fast
 
+#=============================================================================
+# Target rules for targets named test_message_i010
+
+# Build rule for target.
+test_message_i010: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_message_i010
+.PHONY : test_message_i010
+
+# fast build rule for target.
+test_message_i010/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i010.dir/build.make CMakeFiles/test_message_i010.dir/build
+.PHONY : test_message_i010/fast
+
+#=============================================================================
+# Target rules for targets named test_message_i081
+
+# Build rule for target.
+test_message_i081: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_message_i081
+.PHONY : test_message_i081
+
+# fast build rule for target.
+test_message_i081/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i081.dir/build.make CMakeFiles/test_message_i081.dir/build
+.PHONY : test_message_i081/fast
+
+#=============================================================================
+# Target rules for targets named test_message_i083
+
+# Build rule for target.
+test_message_i083: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_message_i083
+.PHONY : test_message_i083
+
+# fast build rule for target.
+test_message_i083/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i083.dir/build.make CMakeFiles/test_message_i083.dir/build
+.PHONY : test_message_i083/fast
+
+#=============================================================================
+# Target rules for targets named test_message_i001
+
+# Build rule for target.
+test_message_i001: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_message_i001
+.PHONY : test_message_i001
+
+# fast build rule for target.
+test_message_i001/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i001.dir/build.make CMakeFiles/test_message_i001.dir/build
+.PHONY : test_message_i001/fast
+
+#=============================================================================
+# Target rules for targets named test_message_i002
+
+# Build rule for target.
+test_message_i002: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_message_i002
+.PHONY : test_message_i002
+
+# fast build rule for target.
+test_message_i002/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i002.dir/build.make CMakeFiles/test_message_i002.dir/build
+.PHONY : test_message_i002/fast
+
+#=============================================================================
+# Target rules for targets named test_order_book
+
+# Build rule for target.
+test_order_book: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_order_book
+.PHONY : test_order_book
+
+# fast build rule for target.
+test_order_book/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_order_book.dir/build.make CMakeFiles/test_order_book.dir/build
+.PHONY : test_order_book/fast
+
+#=============================================================================
+# Target rules for targets named test_taifex_sdk
+
+# Build rule for target.
+test_taifex_sdk: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_taifex_sdk
+.PHONY : test_taifex_sdk
+
+# fast build rule for target.
+test_taifex_sdk/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_taifex_sdk.dir/build.make CMakeFiles/test_taifex_sdk.dir/build
+.PHONY : test_taifex_sdk/fast
+
+#=============================================================================
+# Target rules for targets named pcap_replay_example
+
+# Build rule for target.
+pcap_replay_example: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 pcap_replay_example
+.PHONY : pcap_replay_example
+
+# fast build rule for target.
+pcap_replay_example/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pcap_replay_example.dir/build.make CMakeFiles/pcap_replay_example.dir/build
+.PHONY : pcap_replay_example/fast
+
 checksum.o: checksum.cpp.o
 .PHONY : checksum.o
 
@@ -322,6 +478,30 @@ common_header.s: common_header.cpp.s
 common_header.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/common_header.cpp.s
 .PHONY : common_header.cpp.s
+
+examples/pcap_replay_example.o: examples/pcap_replay_example.cpp.o
+.PHONY : examples/pcap_replay_example.o
+
+# target to build an object file
+examples/pcap_replay_example.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pcap_replay_example.dir/build.make CMakeFiles/pcap_replay_example.dir/examples/pcap_replay_example.cpp.o
+.PHONY : examples/pcap_replay_example.cpp.o
+
+examples/pcap_replay_example.i: examples/pcap_replay_example.cpp.i
+.PHONY : examples/pcap_replay_example.i
+
+# target to preprocess a source file
+examples/pcap_replay_example.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pcap_replay_example.dir/build.make CMakeFiles/pcap_replay_example.dir/examples/pcap_replay_example.cpp.i
+.PHONY : examples/pcap_replay_example.cpp.i
+
+examples/pcap_replay_example.s: examples/pcap_replay_example.cpp.s
+.PHONY : examples/pcap_replay_example.s
+
+# target to generate assembly for a file
+examples/pcap_replay_example.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pcap_replay_example.dir/build.make CMakeFiles/pcap_replay_example.dir/examples/pcap_replay_example.cpp.s
+.PHONY : examples/pcap_replay_example.cpp.s
 
 logger.o: logger.cpp.o
 .PHONY : logger.o
@@ -539,6 +719,270 @@ message_identifier.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/message_identifier.cpp.s
 .PHONY : message_identifier.cpp.s
 
+messages/message_i001.o: messages/message_i001.cpp.o
+.PHONY : messages/message_i001.o
+
+# target to build an object file
+messages/message_i001.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i001.cpp.o
+.PHONY : messages/message_i001.cpp.o
+
+messages/message_i001.i: messages/message_i001.cpp.i
+.PHONY : messages/message_i001.i
+
+# target to preprocess a source file
+messages/message_i001.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i001.cpp.i
+.PHONY : messages/message_i001.cpp.i
+
+messages/message_i001.s: messages/message_i001.cpp.s
+.PHONY : messages/message_i001.s
+
+# target to generate assembly for a file
+messages/message_i001.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i001.cpp.s
+.PHONY : messages/message_i001.cpp.s
+
+messages/message_i002.o: messages/message_i002.cpp.o
+.PHONY : messages/message_i002.o
+
+# target to build an object file
+messages/message_i002.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i002.cpp.o
+.PHONY : messages/message_i002.cpp.o
+
+messages/message_i002.i: messages/message_i002.cpp.i
+.PHONY : messages/message_i002.i
+
+# target to preprocess a source file
+messages/message_i002.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i002.cpp.i
+.PHONY : messages/message_i002.cpp.i
+
+messages/message_i002.s: messages/message_i002.cpp.s
+.PHONY : messages/message_i002.s
+
+# target to generate assembly for a file
+messages/message_i002.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i002.cpp.s
+.PHONY : messages/message_i002.cpp.s
+
+messages/message_i010.o: messages/message_i010.cpp.o
+.PHONY : messages/message_i010.o
+
+# target to build an object file
+messages/message_i010.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i010.cpp.o
+.PHONY : messages/message_i010.cpp.o
+
+messages/message_i010.i: messages/message_i010.cpp.i
+.PHONY : messages/message_i010.i
+
+# target to preprocess a source file
+messages/message_i010.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i010.cpp.i
+.PHONY : messages/message_i010.cpp.i
+
+messages/message_i010.s: messages/message_i010.cpp.s
+.PHONY : messages/message_i010.s
+
+# target to generate assembly for a file
+messages/message_i010.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i010.cpp.s
+.PHONY : messages/message_i010.cpp.s
+
+messages/message_i081.o: messages/message_i081.cpp.o
+.PHONY : messages/message_i081.o
+
+# target to build an object file
+messages/message_i081.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i081.cpp.o
+.PHONY : messages/message_i081.cpp.o
+
+messages/message_i081.i: messages/message_i081.cpp.i
+.PHONY : messages/message_i081.i
+
+# target to preprocess a source file
+messages/message_i081.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i081.cpp.i
+.PHONY : messages/message_i081.cpp.i
+
+messages/message_i081.s: messages/message_i081.cpp.s
+.PHONY : messages/message_i081.s
+
+# target to generate assembly for a file
+messages/message_i081.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i081.cpp.s
+.PHONY : messages/message_i081.cpp.s
+
+messages/message_i083.o: messages/message_i083.cpp.o
+.PHONY : messages/message_i083.o
+
+# target to build an object file
+messages/message_i083.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i083.cpp.o
+.PHONY : messages/message_i083.cpp.o
+
+messages/message_i083.i: messages/message_i083.cpp.i
+.PHONY : messages/message_i083.i
+
+# target to preprocess a source file
+messages/message_i083.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i083.cpp.i
+.PHONY : messages/message_i083.cpp.i
+
+messages/message_i083.s: messages/message_i083.cpp.s
+.PHONY : messages/message_i083.s
+
+# target to generate assembly for a file
+messages/message_i083.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_i083.cpp.s
+.PHONY : messages/message_i083.cpp.s
+
+messages/message_parser_utils.o: messages/message_parser_utils.cpp.o
+.PHONY : messages/message_parser_utils.o
+
+# target to build an object file
+messages/message_parser_utils.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_parser_utils.cpp.o
+.PHONY : messages/message_parser_utils.cpp.o
+
+messages/message_parser_utils.i: messages/message_parser_utils.cpp.i
+.PHONY : messages/message_parser_utils.i
+
+# target to preprocess a source file
+messages/message_parser_utils.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_parser_utils.cpp.i
+.PHONY : messages/message_parser_utils.cpp.i
+
+messages/message_parser_utils.s: messages/message_parser_utils.cpp.s
+.PHONY : messages/message_parser_utils.s
+
+# target to generate assembly for a file
+messages/message_parser_utils.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/messages/message_parser_utils.cpp.s
+.PHONY : messages/message_parser_utils.cpp.s
+
+networking/multicast_receiver.o: networking/multicast_receiver.cpp.o
+.PHONY : networking/multicast_receiver.o
+
+# target to build an object file
+networking/multicast_receiver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/networking/multicast_receiver.cpp.o
+.PHONY : networking/multicast_receiver.cpp.o
+
+networking/multicast_receiver.i: networking/multicast_receiver.cpp.i
+.PHONY : networking/multicast_receiver.i
+
+# target to preprocess a source file
+networking/multicast_receiver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/networking/multicast_receiver.cpp.i
+.PHONY : networking/multicast_receiver.cpp.i
+
+networking/multicast_receiver.s: networking/multicast_receiver.cpp.s
+.PHONY : networking/multicast_receiver.s
+
+# target to generate assembly for a file
+networking/multicast_receiver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/networking/multicast_receiver.cpp.s
+.PHONY : networking/multicast_receiver.cpp.s
+
+networking/network_manager.o: networking/network_manager.cpp.o
+.PHONY : networking/network_manager.o
+
+# target to build an object file
+networking/network_manager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/networking/network_manager.cpp.o
+.PHONY : networking/network_manager.cpp.o
+
+networking/network_manager.i: networking/network_manager.cpp.i
+.PHONY : networking/network_manager.i
+
+# target to preprocess a source file
+networking/network_manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/networking/network_manager.cpp.i
+.PHONY : networking/network_manager.cpp.i
+
+networking/network_manager.s: networking/network_manager.cpp.s
+.PHONY : networking/network_manager.s
+
+# target to generate assembly for a file
+networking/network_manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/networking/network_manager.cpp.s
+.PHONY : networking/network_manager.cpp.s
+
+networking/retransmission_client.o: networking/retransmission_client.cpp.o
+.PHONY : networking/retransmission_client.o
+
+# target to build an object file
+networking/retransmission_client.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/networking/retransmission_client.cpp.o
+.PHONY : networking/retransmission_client.cpp.o
+
+networking/retransmission_client.i: networking/retransmission_client.cpp.i
+.PHONY : networking/retransmission_client.i
+
+# target to preprocess a source file
+networking/retransmission_client.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/networking/retransmission_client.cpp.i
+.PHONY : networking/retransmission_client.cpp.i
+
+networking/retransmission_client.s: networking/retransmission_client.cpp.s
+.PHONY : networking/retransmission_client.s
+
+# target to generate assembly for a file
+networking/retransmission_client.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/networking/retransmission_client.cpp.s
+.PHONY : networking/retransmission_client.cpp.s
+
+networking/retransmission_protocol.o: networking/retransmission_protocol.cpp.o
+.PHONY : networking/retransmission_protocol.o
+
+# target to build an object file
+networking/retransmission_protocol.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/networking/retransmission_protocol.cpp.o
+.PHONY : networking/retransmission_protocol.cpp.o
+
+networking/retransmission_protocol.i: networking/retransmission_protocol.cpp.i
+.PHONY : networking/retransmission_protocol.i
+
+# target to preprocess a source file
+networking/retransmission_protocol.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/networking/retransmission_protocol.cpp.i
+.PHONY : networking/retransmission_protocol.cpp.i
+
+networking/retransmission_protocol.s: networking/retransmission_protocol.cpp.s
+.PHONY : networking/retransmission_protocol.s
+
+# target to generate assembly for a file
+networking/retransmission_protocol.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/networking/retransmission_protocol.cpp.s
+.PHONY : networking/retransmission_protocol.cpp.s
+
+order_book/order_book.o: order_book/order_book.cpp.o
+.PHONY : order_book/order_book.o
+
+# target to build an object file
+order_book/order_book.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/order_book_lib.dir/build.make CMakeFiles/order_book_lib.dir/order_book/order_book.cpp.o
+.PHONY : order_book/order_book.cpp.o
+
+order_book/order_book.i: order_book/order_book.cpp.i
+.PHONY : order_book/order_book.i
+
+# target to preprocess a source file
+order_book/order_book.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/order_book_lib.dir/build.make CMakeFiles/order_book_lib.dir/order_book/order_book.cpp.i
+.PHONY : order_book/order_book.cpp.i
+
+order_book/order_book.s: order_book/order_book.cpp.s
+.PHONY : order_book/order_book.s
+
+# target to generate assembly for a file
+order_book/order_book.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/order_book_lib.dir/build.make CMakeFiles/order_book_lib.dir/order_book/order_book.cpp.s
+.PHONY : order_book/order_book.cpp.s
+
 pack_bcd.o: pack_bcd.cpp.o
 .PHONY : pack_bcd.o
 
@@ -562,6 +1006,30 @@ pack_bcd.s: pack_bcd.cpp.s
 pack_bcd.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/pack_bcd.cpp.s
 .PHONY : pack_bcd.cpp.s
+
+sdk/taifex_sdk.o: sdk/taifex_sdk.cpp.o
+.PHONY : sdk/taifex_sdk.o
+
+# target to build an object file
+sdk/taifex_sdk.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_sdk_lib.dir/build.make CMakeFiles/taifex_sdk_lib.dir/sdk/taifex_sdk.cpp.o
+.PHONY : sdk/taifex_sdk.cpp.o
+
+sdk/taifex_sdk.i: sdk/taifex_sdk.cpp.i
+.PHONY : sdk/taifex_sdk.i
+
+# target to preprocess a source file
+sdk/taifex_sdk.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_sdk_lib.dir/build.make CMakeFiles/taifex_sdk_lib.dir/sdk/taifex_sdk.cpp.i
+.PHONY : sdk/taifex_sdk.cpp.i
+
+sdk/taifex_sdk.s: sdk/taifex_sdk.cpp.s
+.PHONY : sdk/taifex_sdk.s
+
+# target to generate assembly for a file
+sdk/taifex_sdk.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_sdk_lib.dir/build.make CMakeFiles/taifex_sdk_lib.dir/sdk/taifex_sdk.cpp.s
+.PHONY : sdk/taifex_sdk.cpp.s
 
 string_utils.o: string_utils.cpp.o
 .PHONY : string_utils.o
@@ -587,6 +1055,198 @@ string_utils.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_utils.dir/build.make CMakeFiles/core_utils.dir/string_utils.cpp.s
 .PHONY : string_utils.cpp.s
 
+tests/test_message_i001.o: tests/test_message_i001.cpp.o
+.PHONY : tests/test_message_i001.o
+
+# target to build an object file
+tests/test_message_i001.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i001.dir/build.make CMakeFiles/test_message_i001.dir/tests/test_message_i001.cpp.o
+.PHONY : tests/test_message_i001.cpp.o
+
+tests/test_message_i001.i: tests/test_message_i001.cpp.i
+.PHONY : tests/test_message_i001.i
+
+# target to preprocess a source file
+tests/test_message_i001.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i001.dir/build.make CMakeFiles/test_message_i001.dir/tests/test_message_i001.cpp.i
+.PHONY : tests/test_message_i001.cpp.i
+
+tests/test_message_i001.s: tests/test_message_i001.cpp.s
+.PHONY : tests/test_message_i001.s
+
+# target to generate assembly for a file
+tests/test_message_i001.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i001.dir/build.make CMakeFiles/test_message_i001.dir/tests/test_message_i001.cpp.s
+.PHONY : tests/test_message_i001.cpp.s
+
+tests/test_message_i002.o: tests/test_message_i002.cpp.o
+.PHONY : tests/test_message_i002.o
+
+# target to build an object file
+tests/test_message_i002.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i002.dir/build.make CMakeFiles/test_message_i002.dir/tests/test_message_i002.cpp.o
+.PHONY : tests/test_message_i002.cpp.o
+
+tests/test_message_i002.i: tests/test_message_i002.cpp.i
+.PHONY : tests/test_message_i002.i
+
+# target to preprocess a source file
+tests/test_message_i002.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i002.dir/build.make CMakeFiles/test_message_i002.dir/tests/test_message_i002.cpp.i
+.PHONY : tests/test_message_i002.cpp.i
+
+tests/test_message_i002.s: tests/test_message_i002.cpp.s
+.PHONY : tests/test_message_i002.s
+
+# target to generate assembly for a file
+tests/test_message_i002.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i002.dir/build.make CMakeFiles/test_message_i002.dir/tests/test_message_i002.cpp.s
+.PHONY : tests/test_message_i002.cpp.s
+
+tests/test_message_i010.o: tests/test_message_i010.cpp.o
+.PHONY : tests/test_message_i010.o
+
+# target to build an object file
+tests/test_message_i010.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i010.dir/build.make CMakeFiles/test_message_i010.dir/tests/test_message_i010.cpp.o
+.PHONY : tests/test_message_i010.cpp.o
+
+tests/test_message_i010.i: tests/test_message_i010.cpp.i
+.PHONY : tests/test_message_i010.i
+
+# target to preprocess a source file
+tests/test_message_i010.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i010.dir/build.make CMakeFiles/test_message_i010.dir/tests/test_message_i010.cpp.i
+.PHONY : tests/test_message_i010.cpp.i
+
+tests/test_message_i010.s: tests/test_message_i010.cpp.s
+.PHONY : tests/test_message_i010.s
+
+# target to generate assembly for a file
+tests/test_message_i010.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i010.dir/build.make CMakeFiles/test_message_i010.dir/tests/test_message_i010.cpp.s
+.PHONY : tests/test_message_i010.cpp.s
+
+tests/test_message_i081.o: tests/test_message_i081.cpp.o
+.PHONY : tests/test_message_i081.o
+
+# target to build an object file
+tests/test_message_i081.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i081.dir/build.make CMakeFiles/test_message_i081.dir/tests/test_message_i081.cpp.o
+.PHONY : tests/test_message_i081.cpp.o
+
+tests/test_message_i081.i: tests/test_message_i081.cpp.i
+.PHONY : tests/test_message_i081.i
+
+# target to preprocess a source file
+tests/test_message_i081.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i081.dir/build.make CMakeFiles/test_message_i081.dir/tests/test_message_i081.cpp.i
+.PHONY : tests/test_message_i081.cpp.i
+
+tests/test_message_i081.s: tests/test_message_i081.cpp.s
+.PHONY : tests/test_message_i081.s
+
+# target to generate assembly for a file
+tests/test_message_i081.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i081.dir/build.make CMakeFiles/test_message_i081.dir/tests/test_message_i081.cpp.s
+.PHONY : tests/test_message_i081.cpp.s
+
+tests/test_message_i083.o: tests/test_message_i083.cpp.o
+.PHONY : tests/test_message_i083.o
+
+# target to build an object file
+tests/test_message_i083.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i083.dir/build.make CMakeFiles/test_message_i083.dir/tests/test_message_i083.cpp.o
+.PHONY : tests/test_message_i083.cpp.o
+
+tests/test_message_i083.i: tests/test_message_i083.cpp.i
+.PHONY : tests/test_message_i083.i
+
+# target to preprocess a source file
+tests/test_message_i083.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i083.dir/build.make CMakeFiles/test_message_i083.dir/tests/test_message_i083.cpp.i
+.PHONY : tests/test_message_i083.cpp.i
+
+tests/test_message_i083.s: tests/test_message_i083.cpp.s
+.PHONY : tests/test_message_i083.s
+
+# target to generate assembly for a file
+tests/test_message_i083.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i083.dir/build.make CMakeFiles/test_message_i083.dir/tests/test_message_i083.cpp.s
+.PHONY : tests/test_message_i083.cpp.s
+
+tests/test_order_book.o: tests/test_order_book.cpp.o
+.PHONY : tests/test_order_book.o
+
+# target to build an object file
+tests/test_order_book.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_order_book.dir/build.make CMakeFiles/test_order_book.dir/tests/test_order_book.cpp.o
+.PHONY : tests/test_order_book.cpp.o
+
+tests/test_order_book.i: tests/test_order_book.cpp.i
+.PHONY : tests/test_order_book.i
+
+# target to preprocess a source file
+tests/test_order_book.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_order_book.dir/build.make CMakeFiles/test_order_book.dir/tests/test_order_book.cpp.i
+.PHONY : tests/test_order_book.cpp.i
+
+tests/test_order_book.s: tests/test_order_book.cpp.s
+.PHONY : tests/test_order_book.s
+
+# target to generate assembly for a file
+tests/test_order_book.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_order_book.dir/build.make CMakeFiles/test_order_book.dir/tests/test_order_book.cpp.s
+.PHONY : tests/test_order_book.cpp.s
+
+tests/test_taifex_sdk.o: tests/test_taifex_sdk.cpp.o
+.PHONY : tests/test_taifex_sdk.o
+
+# target to build an object file
+tests/test_taifex_sdk.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_taifex_sdk.dir/build.make CMakeFiles/test_taifex_sdk.dir/tests/test_taifex_sdk.cpp.o
+.PHONY : tests/test_taifex_sdk.cpp.o
+
+tests/test_taifex_sdk.i: tests/test_taifex_sdk.cpp.i
+.PHONY : tests/test_taifex_sdk.i
+
+# target to preprocess a source file
+tests/test_taifex_sdk.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_taifex_sdk.dir/build.make CMakeFiles/test_taifex_sdk.dir/tests/test_taifex_sdk.cpp.i
+.PHONY : tests/test_taifex_sdk.cpp.i
+
+tests/test_taifex_sdk.s: tests/test_taifex_sdk.cpp.s
+.PHONY : tests/test_taifex_sdk.s
+
+# target to generate assembly for a file
+tests/test_taifex_sdk.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_taifex_sdk.dir/build.make CMakeFiles/test_taifex_sdk.dir/tests/test_taifex_sdk.cpp.s
+.PHONY : tests/test_taifex_sdk.cpp.s
+
+utils/log_file_packet_simulator.o: utils/log_file_packet_simulator.cpp.o
+.PHONY : utils/log_file_packet_simulator.o
+
+# target to build an object file
+utils/log_file_packet_simulator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pcap_replay_example.dir/build.make CMakeFiles/pcap_replay_example.dir/utils/log_file_packet_simulator.cpp.o
+.PHONY : utils/log_file_packet_simulator.cpp.o
+
+utils/log_file_packet_simulator.i: utils/log_file_packet_simulator.cpp.i
+.PHONY : utils/log_file_packet_simulator.i
+
+# target to preprocess a source file
+utils/log_file_packet_simulator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pcap_replay_example.dir/build.make CMakeFiles/pcap_replay_example.dir/utils/log_file_packet_simulator.cpp.i
+.PHONY : utils/log_file_packet_simulator.cpp.i
+
+utils/log_file_packet_simulator.s: utils/log_file_packet_simulator.cpp.s
+.PHONY : utils/log_file_packet_simulator.s
+
+# target to generate assembly for a file
+utils/log_file_packet_simulator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pcap_replay_example.dir/build.make CMakeFiles/pcap_replay_example.dir/utils/log_file_packet_simulator.cpp.s
+.PHONY : utils/log_file_packet_simulator.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -606,14 +1266,29 @@ help:
 	@echo "... error_codes_tester"
 	@echo "... logger_tester"
 	@echo "... message_identifier_tester"
+	@echo "... order_book_lib"
 	@echo "... pack_bcd_tester"
+	@echo "... pcap_replay_example"
+	@echo "... specific_message_parsers"
 	@echo "... string_utils_tester"
+	@echo "... taifex_networking_lib"
+	@echo "... taifex_sdk_lib"
+	@echo "... test_message_i001"
+	@echo "... test_message_i002"
+	@echo "... test_message_i010"
+	@echo "... test_message_i081"
+	@echo "... test_message_i083"
+	@echo "... test_order_book"
+	@echo "... test_taifex_sdk"
 	@echo "... checksum.o"
 	@echo "... checksum.i"
 	@echo "... checksum.s"
 	@echo "... common_header.o"
 	@echo "... common_header.i"
 	@echo "... common_header.s"
+	@echo "... examples/pcap_replay_example.o"
+	@echo "... examples/pcap_replay_example.i"
+	@echo "... examples/pcap_replay_example.s"
 	@echo "... logger.o"
 	@echo "... logger.i"
 	@echo "... logger.s"
@@ -641,12 +1316,72 @@ help:
 	@echo "... message_identifier.o"
 	@echo "... message_identifier.i"
 	@echo "... message_identifier.s"
+	@echo "... messages/message_i001.o"
+	@echo "... messages/message_i001.i"
+	@echo "... messages/message_i001.s"
+	@echo "... messages/message_i002.o"
+	@echo "... messages/message_i002.i"
+	@echo "... messages/message_i002.s"
+	@echo "... messages/message_i010.o"
+	@echo "... messages/message_i010.i"
+	@echo "... messages/message_i010.s"
+	@echo "... messages/message_i081.o"
+	@echo "... messages/message_i081.i"
+	@echo "... messages/message_i081.s"
+	@echo "... messages/message_i083.o"
+	@echo "... messages/message_i083.i"
+	@echo "... messages/message_i083.s"
+	@echo "... messages/message_parser_utils.o"
+	@echo "... messages/message_parser_utils.i"
+	@echo "... messages/message_parser_utils.s"
+	@echo "... networking/multicast_receiver.o"
+	@echo "... networking/multicast_receiver.i"
+	@echo "... networking/multicast_receiver.s"
+	@echo "... networking/network_manager.o"
+	@echo "... networking/network_manager.i"
+	@echo "... networking/network_manager.s"
+	@echo "... networking/retransmission_client.o"
+	@echo "... networking/retransmission_client.i"
+	@echo "... networking/retransmission_client.s"
+	@echo "... networking/retransmission_protocol.o"
+	@echo "... networking/retransmission_protocol.i"
+	@echo "... networking/retransmission_protocol.s"
+	@echo "... order_book/order_book.o"
+	@echo "... order_book/order_book.i"
+	@echo "... order_book/order_book.s"
 	@echo "... pack_bcd.o"
 	@echo "... pack_bcd.i"
 	@echo "... pack_bcd.s"
+	@echo "... sdk/taifex_sdk.o"
+	@echo "... sdk/taifex_sdk.i"
+	@echo "... sdk/taifex_sdk.s"
 	@echo "... string_utils.o"
 	@echo "... string_utils.i"
 	@echo "... string_utils.s"
+	@echo "... tests/test_message_i001.o"
+	@echo "... tests/test_message_i001.i"
+	@echo "... tests/test_message_i001.s"
+	@echo "... tests/test_message_i002.o"
+	@echo "... tests/test_message_i002.i"
+	@echo "... tests/test_message_i002.s"
+	@echo "... tests/test_message_i010.o"
+	@echo "... tests/test_message_i010.i"
+	@echo "... tests/test_message_i010.s"
+	@echo "... tests/test_message_i081.o"
+	@echo "... tests/test_message_i081.i"
+	@echo "... tests/test_message_i081.s"
+	@echo "... tests/test_message_i083.o"
+	@echo "... tests/test_message_i083.i"
+	@echo "... tests/test_message_i083.s"
+	@echo "... tests/test_order_book.o"
+	@echo "... tests/test_order_book.i"
+	@echo "... tests/test_order_book.s"
+	@echo "... tests/test_taifex_sdk.o"
+	@echo "... tests/test_taifex_sdk.i"
+	@echo "... tests/test_taifex_sdk.s"
+	@echo "... utils/log_file_packet_simulator.o"
+	@echo "... utils/log_file_packet_simulator.i"
+	@echo "... utils/log_file_packet_simulator.s"
 .PHONY : help
 
 

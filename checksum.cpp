@@ -1,17 +1,18 @@
 // checksum.cpp
 #include "checksum.h"
+#include <span>      // For std::span
+#include <cstddef>   // For std::byte
+#include <vector>    // For std::vector overload
 
 namespace CoreUtils {
 
-unsigned char calculateXorChecksum(const unsigned char* data_segment_for_checksum, size_t length) {
-    if (data_segment_for_checksum == nullptr || length == 0) {
-        return 0; // Or throw an error, but 0 for empty segment is a possible checksum.
-                  // The spec implies non-empty segments.
+unsigned char calculateXorChecksum(std::span<const std::byte> data_segment) {
+    if (data_segment.empty()) {
+        return 0;
     }
     unsigned char checksum = 0;
-    // The spec says "每個byte 中各bit 之 XOR 值". This is just XORing the bytes.
-    for (size_t i = 0; i < length; ++i) {
-        checksum ^= data_segment_for_checksum[i];
+    for (std::byte b : data_segment) {
+        checksum ^= static_cast<unsigned char>(b); // Cast std::byte to unsigned char for XOR
     }
     return checksum;
 }
@@ -20,15 +21,17 @@ unsigned char calculateXorChecksum(const std::vector<unsigned char>& data) {
     if (data.empty()) {
         return 0;
     }
-    return calculateXorChecksum(data.data(), data.size());
+    // Convert vector<unsigned char> to span<const std::byte>
+    return calculateXorChecksum(std::as_bytes(std::span<const unsigned char>(data)));
 }
 
-bool verifyXorChecksum(const unsigned char* data_segment_for_checksum, size_t length, unsigned char expected_checksum) {
-    return calculateXorChecksum(data_segment_for_checksum, length) == expected_checksum;
+bool verifyXorChecksum(std::span<const std::byte> data_segment, unsigned char expected_checksum) {
+    return calculateXorChecksum(data_segment) == expected_checksum;
 }
 
 bool verifyXorChecksum(const std::vector<unsigned char>& data, unsigned char expected_checksum) {
-    return calculateXorChecksum(data.data(), data.size()) == expected_checksum;
+    // Convert vector<unsigned char> to span<const std::byte>
+    return verifyXorChecksum(std::as_bytes(std::span<const unsigned char>(data)), expected_checksum);
 }
 
 } // namespace CoreUtils

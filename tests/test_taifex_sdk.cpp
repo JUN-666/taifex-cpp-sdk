@@ -9,6 +9,8 @@
 #include <cassert>
 #include <iomanip> // For std::hex printing if needed
 #include <cstring> // For memcpy
+#include <span>      // For std::span
+#include <cstddef>   // For std::byte
 
 // Using namespaces for brevity
 using namespace Taifex;
@@ -116,7 +118,10 @@ std::vector<unsigned char> create_raw_i010_message(
 
     memcpy(full_message.data() + CommonHeader::HEADER_SIZE, msg_body.data(), body_length);
 
-    unsigned char checksum = CoreUtils::calculate_checksum(full_message.data() + 1, CommonHeader::HEADER_SIZE -1 + body_length);
+    // Checksum: from byte 1 (Transmission Code) to end of body
+    size_t checksum_data_length = (CommonHeader::HEADER_SIZE - 1) + body_length;
+    std::span<const unsigned char> checksum_data_uchars_i010(full_message.data() + 1, checksum_data_length);
+    unsigned char checksum = CoreUtils::calculateXorChecksum(std::as_bytes(checksum_data_uchars_i010));
     full_message[CommonHeader::HEADER_SIZE + body_length] = checksum;
 
     full_message[CommonHeader::HEADER_SIZE + body_length + 1] = 0x0D;
@@ -319,8 +324,11 @@ std::vector<unsigned char> create_raw_i083_message(
     memcpy(full_message.data() + header_write_offset, header_obj.body_length_bcd.data(), 2); header_write_offset += 2;
 
     memcpy(full_message.data() + CommonHeader::HEADER_SIZE, msg_body.data(), body_length);
-    unsigned char checksum = CoreUtils::calculate_checksum(full_message.data() + 1, CommonHeader::HEADER_SIZE - 1 + body_length);
-    full_message[CommonHeader::HEADER_SIZE + body_length] = checksum;
+
+    size_t checksum_data_length = (CommonHeader::HEADER_SIZE - 1) + body_length;
+    std::span<const unsigned char> checksum_data_uchars(full_message.data() + 1, checksum_data_length);
+    unsigned char checksum_val = CoreUtils::calculateXorChecksum(std::as_bytes(checksum_data_uchars));
+    full_message[CommonHeader::HEADER_SIZE + body_length] = checksum_val;
     full_message[CommonHeader::HEADER_SIZE + body_length + 1] = 0x0D;
     full_message[CommonHeader::HEADER_SIZE + body_length + 2] = 0x0A;
 
@@ -462,8 +470,11 @@ std::vector<unsigned char> create_raw_i081_message(
     memcpy(full_message.data() + header_write_offset, header_obj.body_length_bcd.data(), 2); header_write_offset += 2;
 
     memcpy(full_message.data() + CommonHeader::HEADER_SIZE, msg_body.data(), body_length);
-    unsigned char checksum = CoreUtils::calculate_checksum(full_message.data() + 1, CommonHeader::HEADER_SIZE - 1 + body_length);
-    full_message[CommonHeader::HEADER_SIZE + body_length] = checksum;
+
+    size_t checksum_data_length = (CommonHeader::HEADER_SIZE - 1) + body_length;
+    std::span<const unsigned char> checksum_data_uchars(full_message.data() + 1, checksum_data_length);
+    unsigned char checksum_val = CoreUtils::calculateXorChecksum(std::as_bytes(checksum_data_uchars));
+    full_message[CommonHeader::HEADER_SIZE + body_length] = checksum_val;
     full_message[CommonHeader::HEADER_SIZE + body_length + 1] = 0x0D;
     full_message[CommonHeader::HEADER_SIZE + body_length + 2] = 0x0A;
 
@@ -625,7 +636,8 @@ void test_process_i002_sequence_reset() {
     uint16_t i010_channel_id = test_channel_id + 1;
     raw_i010[7] = static_cast<unsigned char>((i010_channel_id >> 8) & 0xFF);
     raw_i010[8] = static_cast<unsigned char>(i010_channel_id & 0xFF);
-    unsigned char new_checksum_i010 = CoreUtils::calculate_checksum(raw_i010.data() + 1, CommonHeader::HEADER_SIZE -1 + 32 );
+    std::span<const unsigned char> i010_checksum_payload(raw_i010.data() + 1, CommonHeader::HEADER_SIZE -1 + 32);
+    unsigned char new_checksum_i010 = CoreUtils::calculateXorChecksum(std::as_bytes(i010_checksum_payload));
     raw_i010[CommonHeader::HEADER_SIZE + 32] = new_checksum_i010;
 
 
@@ -636,7 +648,8 @@ void test_process_i002_sequence_reset() {
     raw_i083[7] = static_cast<unsigned char>((test_channel_id >> 8) & 0xFF);
     raw_i083[8] = static_cast<unsigned char>(test_channel_id & 0xFF);
     uint16_t i083_body_len = 20 + 5 + 1 + 1 + (entries.size() * 12);
-    unsigned char new_checksum_i083 = CoreUtils::calculate_checksum(raw_i083.data() + 1, CommonHeader::HEADER_SIZE -1 + i083_body_len );
+    std::span<const unsigned char> i083_checksum_payload(raw_i083.data() + 1, CommonHeader::HEADER_SIZE -1 + i083_body_len);
+    unsigned char new_checksum_i083 = CoreUtils::calculateXorChecksum(std::as_bytes(i083_checksum_payload));
     raw_i083[CommonHeader::HEADER_SIZE + i083_body_len] = new_checksum_i083;
 
 

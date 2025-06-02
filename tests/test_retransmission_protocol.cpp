@@ -8,6 +8,8 @@
 #include <cstring> // For memcpy in tests
 #include <iomanip> // For std::hex
 #include <type_traits> // For std::is_same_v
+#include <span>      // For std::span
+#include <cstddef>   // For std::byte
 
 // Using namespace for brevity
 using namespace TaifexRetransmission;
@@ -137,8 +139,10 @@ void test_message_serialization_deserialization(
         actual_msg_size_val = network_to_host_short(actual_msg_size_val);
         size_t len_for_checksum = sizeof(uint16_t) + actual_msg_size_val;
 
-        if (len_for_checksum < bad_type_buffer.size()) { // Ensure len_for_checksum is valid for buffer access
-             bad_type_buffer[len_for_checksum] = calculate_retransmission_checksum(bad_type_buffer.data(), len_for_checksum);
+        if (len_for_checksum < bad_type_buffer.size()) { // Ensure len_for_checksum is valid for buffer access for checksum byte
+            // Create a span for the checksum calculation
+            std::span<const unsigned char> checksum_data_uchars(bad_type_buffer.data(), len_for_checksum);
+            bad_type_buffer[len_for_checksum] = calculate_retransmission_checksum(std::as_bytes(checksum_data_uchars));
         }
 
         MsgType msg_bad_type;

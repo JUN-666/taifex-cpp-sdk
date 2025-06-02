@@ -6,4 +6,4 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/app
 
-CXX_FLAGS = -std=c++11
+CXX_FLAGS = -std=c++20

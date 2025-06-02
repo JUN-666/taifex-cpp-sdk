@@ -48,6 +48,10 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/core_utils.dir/DependInfo.cmake"
+  "CMakeFiles/specific_message_parsers.dir/DependInfo.cmake"
+  "CMakeFiles/order_book_lib.dir/DependInfo.cmake"
+  "CMakeFiles/taifex_networking_lib.dir/DependInfo.cmake"
+  "CMakeFiles/taifex_sdk_lib.dir/DependInfo.cmake"
   "CMakeFiles/pack_bcd_tester.dir/DependInfo.cmake"
   "CMakeFiles/checksum_tester.dir/DependInfo.cmake"
   "CMakeFiles/string_utils_tester.dir/DependInfo.cmake"
@@ -55,4 +59,12 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/error_codes_tester.dir/DependInfo.cmake"
   "CMakeFiles/common_header_parser_tester.dir/DependInfo.cmake"
   "CMakeFiles/message_identifier_tester.dir/DependInfo.cmake"
+  "CMakeFiles/test_message_i010.dir/DependInfo.cmake"
+  "CMakeFiles/test_message_i081.dir/DependInfo.cmake"
+  "CMakeFiles/test_message_i083.dir/DependInfo.cmake"
+  "CMakeFiles/test_message_i001.dir/DependInfo.cmake"
+  "CMakeFiles/test_message_i002.dir/DependInfo.cmake"
+  "CMakeFiles/test_order_book.dir/DependInfo.cmake"
+  "CMakeFiles/test_taifex_sdk.dir/DependInfo.cmake"
+  "CMakeFiles/pcap_replay_example.dir/DependInfo.cmake"
   )

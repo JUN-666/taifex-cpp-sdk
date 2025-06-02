@@ -1,10 +1,10 @@
 #include "sdk/taifex_sdk.h"
 
 // Required includes for types used in TaifexSdk state and method implementations
-#include "core_utils/common_header.h"
-#include "core_utils/message_identifier.h"
-#include "core_utils/logger.h" // Assuming CoreUtils::Logger has static methods or is accessible
-#include "core_utils/checksum.h" // Assuming checksum utilities are here
+#include "common_header.h"         // Removed core_utils/ prefix
+#include "message_identifier.h"    // Removed core_utils/ prefix
+#include "logger.h"                // Removed core_utils/ prefix
+#include "checksum.h"              // Removed core_utils/ prefix
 
 // Specific Message Parser function headers
 #include "messages/message_i010.h"
@@ -87,7 +87,10 @@ void TaifexSdk::process_message(const unsigned char* raw_message, size_t length)
     // Length of data to checksum = (CommonHeader::HEADER_SIZE + body_len_from_header - 1) - 1 + 1
     //                             = CommonHeader::HEADER_SIZE + body_len_from_header - 1
     // Start pointer for checksum is raw_message + 1 (skip ESC)
-    unsigned char calculated_checksum = CoreUtils::calculate_checksum(raw_message + 1, CoreUtils::CommonHeader::HEADER_SIZE + body_len_from_header - 1);
+    // Length of data to checksum = CommonHeader::HEADER_SIZE (excluding ESC) + body_len_from_header - 1 (actual checksum byte itself)
+    size_t checksum_data_length = (CoreUtils::CommonHeader::HEADER_SIZE -1) + body_len_from_header;
+    std::span<const unsigned char> checksum_data_uchars(raw_message + 1, checksum_data_length);
+    unsigned char calculated_checksum = CoreUtils::calculateXorChecksum(std::as_bytes(checksum_data_uchars));
 
     if (calculated_checksum != received_checksum) {
         CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Checksum validation failed. Calculated: " +
