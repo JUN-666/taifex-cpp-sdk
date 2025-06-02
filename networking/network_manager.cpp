@@ -2,7 +2,7 @@
 #include "networking/multicast_receiver.h"
 #include "networking/retransmission_client.h"
 #include "sdk/taifex_sdk.h"
-#include "core_utils/common_header.h"
+#include "common_header.h"
 #include "logger.h"
 #include "networking/retransmission_protocol.h" // For TaifexRetransmission::DataResponse102 etc.
 
