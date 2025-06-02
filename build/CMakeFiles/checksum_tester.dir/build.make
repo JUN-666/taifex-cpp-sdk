@@ -108,3 +108,4 @@ CMakeFiles/checksum_tester.dir/clean:
 CMakeFiles/checksum_tester.dir/depend:
 	cd /app/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /app /app /app/build /app/build /app/build/CMakeFiles/checksum_tester.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/checksum_tester.dir/depend
+

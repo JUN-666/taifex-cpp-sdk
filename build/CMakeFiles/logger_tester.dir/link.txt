@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/logger_tester.dir/main_logger_test.cpp.o -o logger_tester  libcore_utils.a
+/usr/bin/c++ CMakeFiles/logger_tester.dir/main_logger_test.cpp.o -o logger_tester  libcore_utils.a 
