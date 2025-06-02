@@ -32,7 +32,7 @@ void StandardTimeFormat::serialize(std::vector<unsigned char>& buffer) const {
 
 bool StandardTimeFormat::deserialize(const unsigned char* data, size_t& offset, size_t total_len) {
     if (offset + sizeof(epoch_s) + sizeof(nanosecond) > total_len) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "StandardTimeFormat deserialize: Not enough data.");
+        LOG_ERROR << "StandardTimeFormat deserialize: Not enough data.";
         return false;
     }
 
@@ -73,7 +73,7 @@ void RetransmissionMsgHeader::serialize(std::vector<unsigned char>& buffer) cons
 
 bool RetransmissionMsgHeader::deserialize(const unsigned char* data, size_t& offset, size_t total_len) {
     if (offset + SIZE > total_len) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionMsgHeader deserialize: Not enough data for header.");
+        LOG_ERROR << "RetransmissionMsgHeader deserialize: Not enough data for header.";
         return false;
     }
 
@@ -90,7 +90,7 @@ bool RetransmissionMsgHeader::deserialize(const unsigned char* data, size_t& off
     msg_seq_num = NetworkingUtils::network_to_host_long(msg_seq_num);
 
     if (!msg_time.deserialize(data, offset, total_len)) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionMsgHeader deserialize: Failed to parse msg_time.");
+        LOG_ERROR << "RetransmissionMsgHeader deserialize: Failed to parse msg_time.";
         return false; // msg_time.deserialize already advanced offset
     }
     return true;
@@ -106,7 +106,7 @@ void RetransmissionMsgFooter::serialize(std::vector<unsigned char>& buffer, cons
 bool RetransmissionMsgFooter::deserialize(const unsigned char* data, size_t& offset, size_t total_len,
                                           const unsigned char* msg_start_for_checksum, size_t len_for_checksum) {
     if (offset + SIZE > total_len) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionMsgFooter deserialize: Not enough data for footer.");
+        LOG_ERROR << "RetransmissionMsgFooter deserialize: Not enough data for footer.";
         return false;
     }
 
@@ -114,13 +114,12 @@ bool RetransmissionMsgFooter::deserialize(const unsigned char* data, size_t& off
     offset += SIZE;
 
     if (!msg_start_for_checksum || len_for_checksum == 0) {
-         CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionMsgFooter deserialize: Invalid parameters for checksum calculation.");
+         LOG_ERROR << "RetransmissionMsgFooter deserialize: Invalid parameters for checksum calculation.";
         return false;
     }
     uint8_t calculated = calculate_retransmission_checksum(msg_start_for_checksum, len_for_checksum);
     if (calculated != received_checksum) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Retransmission checksum mismatch. Calculated: " +
-                               std::to_string(calculated) + ", Received: " + std::to_string(received_checksum));
+        LOG_ERROR << "Retransmission checksum mismatch. Calculated: " << calculated << ", Received: " << received_checksum;
         return false;
     }
     this->check_sum = received_checksum;
@@ -136,7 +135,7 @@ const uint16_t LOGIN_REQUEST_020_MSG_SIZE_FIELD_VALUE = (RetransmissionMsgHeader
 
 uint8_t calculate_check_code(uint16_t mult_op, const std::string& password_str) {
     if (password_str.empty()) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Password cannot be empty for CheckCode calculation.");
+        LOG_ERROR << "Password cannot be empty for CheckCode calculation.";
         return 0;
     }
     long long password_val = 0;
@@ -145,10 +144,10 @@ uint8_t calculate_check_code(uint16_t mult_op, const std::string& password_str) 
         // Assuming it's a string of digits for now.
         password_val = std::stoll(password_str);
     } catch (const std::invalid_argument& ia) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Invalid password format (not a number) for CheckCode: " + password_str + " Error: " + ia.what());
+        LOG_ERROR << "Invalid password format (not a number) for CheckCode: " << password_str << " Error: " << ia.what();
         return 0;
     } catch (const std::out_of_range& oor) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "Password value out of range for CheckCode: " + password_str + " Error: " + oor.what());
+        LOG_ERROR << "Password value out of range for CheckCode: " << password_str << " Error: " << oor.what();
         return 0;
     }
 
@@ -206,29 +205,29 @@ void LoginRequest020::serialize(std::vector<unsigned char>& buffer, const std::s
 bool LoginRequest020::deserialize(const unsigned char* data, size_t len, const std::string& password_str) {
     size_t offset = 0;
     if (!header.deserialize(data, offset, len)) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginRequest020 deserialize: Header parsing failed.");
+        LOG_ERROR << "LoginRequest020 deserialize: Header parsing failed.";
         return false;
     }
     if (header.msg_type != MESSAGE_TYPE) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginRequest020 deserialize: Incorrect message type. Expected: " + std::to_string(MESSAGE_TYPE) + ", Got: " + std::to_string(header.msg_type));
+        LOG_ERROR << "LoginRequest020 deserialize: Incorrect message type. Expected: " << MESSAGE_TYPE << ", Got: " << header.msg_type;
         return false;
     }
     if (header.msg_size != LOGIN_REQUEST_020_MSG_SIZE_FIELD_VALUE) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginRequest020 deserialize: Incorrect msg_size. Expected: " + std::to_string(LOGIN_REQUEST_020_MSG_SIZE_FIELD_VALUE) + ", Got: " + std::to_string(header.msg_size));
+        LOG_ERROR << "LoginRequest020 deserialize: Incorrect msg_size. Expected: " << LOGIN_REQUEST_020_MSG_SIZE_FIELD_VALUE << ", Got: " << header.msg_size;
         return false;
     }
 
     // Total expected message length from start of data = sizeof(MsgSize field) + header.msg_size (payload for checksum) + sizeof(CheckSum byte)
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
     if (len < expected_full_msg_len) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginRequest020 deserialize: Data length too short for declared msg_size. Expected: " + std::to_string(expected_full_msg_len) + ", Got: " + std::to_string(len));
+        LOG_ERROR << "LoginRequest020 deserialize: Data length too short for declared msg_size. Expected: " << expected_full_msg_len << ", Got: " << len;
         return false;
     }
 
 
     // Payload (offset is currently after header)
     if (offset + LOGIN_REQUEST_020_PAYLOAD_SIZE > len) { // Check if enough data for payload based on offset
-         CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginRequest020 deserialize: Not enough data for payload.");
+         LOG_ERROR << "LoginRequest020 deserialize: Not enough data for payload.";
         return false;
     }
     memcpy(&multiplication_operator, data + offset, sizeof(multiplication_operator));
@@ -240,7 +239,7 @@ bool LoginRequest020::deserialize(const unsigned char* data, size_t len, const s
     // Optional: Validate received check_code (only if password_str is available and context allows)
     // uint8_t expected_check_code = calculate_check_code(this->multiplication_operator, password_str);
     // if (this->check_code != expected_check_code) {
-    //    CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginRequest020 deserialize: CheckCode mismatch.");
+    //    LOG_ERROR << "LoginRequest020 deserialize: CheckCode mismatch.";
     //    return false;
     // }
 
@@ -252,7 +251,7 @@ bool LoginRequest020::deserialize(const unsigned char* data, size_t len, const s
     // Data for checksum starts from data[0] (MsgSize field) and has length = sizeof(uint16_t for MsgSize) + header.msg_size
     size_t checksum_data_len = sizeof(uint16_t) + header.msg_size;
     if (!footer.deserialize(data, offset, len, data, checksum_data_len)) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginRequest020 deserialize: Footer checksum validation failed.");
+        LOG_ERROR << "LoginRequest020 deserialize: Footer checksum validation failed.";
         return false;
     }
 
@@ -290,26 +289,26 @@ void LoginResponse030::serialize(std::vector<unsigned char>& buffer) const {
 bool LoginResponse030::deserialize(const unsigned char* data, size_t len) {
     size_t offset = 0;
     if (!header.deserialize(data, offset, len)) {
-         CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginResponse030 deserialize: Header parsing failed.");
+         LOG_ERROR << "LoginResponse030 deserialize: Header parsing failed.";
         return false;
     }
     if (header.msg_type != MESSAGE_TYPE) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginResponse030: Type mismatch. Expected: " + std::to_string(MESSAGE_TYPE) + ", Got: " + std::to_string(header.msg_type));
+        LOG_ERROR << "LoginResponse030: Type mismatch. Expected: " << MESSAGE_TYPE << ", Got: " << header.msg_type;
         return false;
     }
     if (header.msg_size != LOGIN_RESPONSE_030_MSG_SIZE_FIELD_VALUE) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginResponse030: Size mismatch. Expected: " + std::to_string(LOGIN_RESPONSE_030_MSG_SIZE_FIELD_VALUE) + ", Got: " + std::to_string(header.msg_size));
+        LOG_ERROR << "LoginResponse030: Size mismatch. Expected: " << LOGIN_RESPONSE_030_MSG_SIZE_FIELD_VALUE << ", Got: " << header.msg_size;
         return false;
     }
 
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
     if (len < expected_full_msg_len) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginResponse030: Overall length too short. Expected at least: " + std::to_string(expected_full_msg_len) + ", Got: " + std::to_string(len));
+        LOG_ERROR << "LoginResponse030: Overall length too short. Expected at least: " << expected_full_msg_len << ", Got: " << len;
         return false;
     }
 
     if (offset + sizeof(channel_id) > len) { // Check against total length, though already covered by expected_full_msg_len indirectly
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginResponse030: Not enough data for channel_id.");
+        LOG_ERROR << "LoginResponse030: Not enough data for channel_id.";
         return false;
     }
     memcpy(&channel_id, data + offset, sizeof(channel_id));
@@ -317,7 +316,7 @@ bool LoginResponse030::deserialize(const unsigned char* data, size_t len) {
     channel_id = NetworkingUtils::network_to_host_short(channel_id);
 
     if (!footer.deserialize(data, offset, len, data, sizeof(uint16_t) + header.msg_size)) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "LoginResponse030: Footer checksum validation failed.");
+        LOG_ERROR << "LoginResponse030: Footer checksum validation failed.";
         return false;
     }
 
@@ -347,11 +346,11 @@ void RetransmissionStart050::serialize(std::vector<unsigned char>& buffer) const
 bool RetransmissionStart050::deserialize(const unsigned char* data, size_t len) {
     size_t offset = 0;
     if (!header.deserialize(data, offset, len)) return false;
-    if (header.msg_type != MESSAGE_TYPE) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionStart050: Type mismatch."); return false; }
-    if (header.msg_size != RETRANSMISSION_START_050_MSG_SIZE_FIELD_VALUE) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionStart050: Size mismatch."); return false; }
+    if (header.msg_type != MESSAGE_TYPE) { LOG_ERROR << "RetransmissionStart050: Type mismatch."; return false; }
+    if (header.msg_size != RETRANSMISSION_START_050_MSG_SIZE_FIELD_VALUE) { LOG_ERROR << "RetransmissionStart050: Size mismatch."; return false; }
 
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
-    if (len < expected_full_msg_len) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "RetransmissionStart050: Overall length too short."); return false; }
+    if (len < expected_full_msg_len) { LOG_ERROR << "RetransmissionStart050: Overall length too short."; return false; }
 
     // No payload to deserialize
 
@@ -383,14 +382,14 @@ void ErrorNotification010::serialize(std::vector<unsigned char>& buffer) const {
 bool ErrorNotification010::deserialize(const unsigned char* data, size_t len) {
     size_t offset = 0;
     if (!header.deserialize(data, offset, len)) return false;
-    if (header.msg_type != MESSAGE_TYPE) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "ErrorNotification010: Type mismatch."); return false; }
-    if (header.msg_size != ERROR_NOTIFICATION_010_MSG_SIZE_FIELD_VALUE) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "ErrorNotification010: Size mismatch."); return false; }
+    if (header.msg_type != MESSAGE_TYPE) { LOG_ERROR << "ErrorNotification010: Type mismatch."; return false; }
+    if (header.msg_size != ERROR_NOTIFICATION_010_MSG_SIZE_FIELD_VALUE) { LOG_ERROR << "ErrorNotification010: Size mismatch."; return false; }
 
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
-    if (len < expected_full_msg_len) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "ErrorNotification010: Overall length too short."); return false; }
+    if (len < expected_full_msg_len) { LOG_ERROR << "ErrorNotification010: Overall length too short."; return false; }
 
     if (offset + sizeof(status_code) > len) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "ErrorNotification010: Not enough data for status_code.");
+        LOG_ERROR << "ErrorNotification010: Not enough data for status_code.";
         return false;
     }
     status_code = data[offset++];
@@ -426,11 +425,11 @@ void HeartbeatServer104::serialize(std::vector<unsigned char>& buffer) const {
 bool HeartbeatServer104::deserialize(const unsigned char* data, size_t len) {
     size_t offset = 0;
     if (!header.deserialize(data, offset, len)) return false;
-    if (header.msg_type != MESSAGE_TYPE) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "HeartbeatServer104: Type mismatch."); return false; }
-    if (header.msg_size != HEARTBEAT_SERVER_104_MSG_SIZE_FIELD_VALUE) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "HeartbeatServer104: Size mismatch."); return false; }
+    if (header.msg_type != MESSAGE_TYPE) { LOG_ERROR << "HeartbeatServer104: Type mismatch."; return false; }
+    if (header.msg_size != HEARTBEAT_SERVER_104_MSG_SIZE_FIELD_VALUE) { LOG_ERROR << "HeartbeatServer104: Size mismatch."; return false; }
 
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
-    if (len < expected_full_msg_len) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "HeartbeatServer104: Overall length too short."); return false; }
+    if (len < expected_full_msg_len) { LOG_ERROR << "HeartbeatServer104: Overall length too short."; return false; }
 
     if (!footer.deserialize(data, offset, len, data, sizeof(uint16_t) + header.msg_size)) return false;
 
@@ -458,11 +457,11 @@ void HeartbeatClient105::serialize(std::vector<unsigned char>& buffer) const {
 bool HeartbeatClient105::deserialize(const unsigned char* data, size_t len) {
     size_t offset = 0;
     if (!header.deserialize(data, offset, len)) return false;
-    if (header.msg_type != MESSAGE_TYPE) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "HeartbeatClient105: Type mismatch."); return false; }
-    if (header.msg_size != HEARTBEAT_CLIENT_105_MSG_SIZE_FIELD_VALUE) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "HeartbeatClient105: Size mismatch."); return false; }
+    if (header.msg_type != MESSAGE_TYPE) { LOG_ERROR << "HeartbeatClient105: Type mismatch."; return false; }
+    if (header.msg_size != HEARTBEAT_CLIENT_105_MSG_SIZE_FIELD_VALUE) { LOG_ERROR << "HeartbeatClient105: Size mismatch."; return false; }
 
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
-    if (len < expected_full_msg_len) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "HeartbeatClient105: Overall length too short."); return false; }
+    if (len < expected_full_msg_len) { LOG_ERROR << "HeartbeatClient105: Overall length too short."; return false; }
 
     if (!footer.deserialize(data, offset, len, data, sizeof(uint16_t) + header.msg_size)) return false;
 
@@ -502,11 +501,11 @@ void DataRequest101::serialize(std::vector<unsigned char>& buffer) const {
 bool DataRequest101::deserialize(const unsigned char* data, size_t len) {
     size_t offset = 0;
     if (!header.deserialize(data, offset, len)) return false;
-    if (header.msg_type != MESSAGE_TYPE) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "DataRequest101: Type mismatch."); return false; }
-    if (header.msg_size != DATA_REQUEST_101_MSG_SIZE_FIELD_VALUE) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "DataRequest101: Size mismatch."); return false; }
+    if (header.msg_type != MESSAGE_TYPE) { LOG_ERROR << "DataRequest101: Type mismatch."; return false; }
+    if (header.msg_size != DATA_REQUEST_101_MSG_SIZE_FIELD_VALUE) { LOG_ERROR << "DataRequest101: Size mismatch."; return false; }
 
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
-    if (len < expected_full_msg_len) { CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "DataRequest101: Overall length too short."); return false; }
+    if (len < expected_full_msg_len) { LOG_ERROR << "DataRequest101: Overall length too short."; return false; }
 
     if (offset + sizeof(channel_id) > len) return false;
     memcpy(&channel_id, data + offset, sizeof(channel_id));
@@ -572,18 +571,18 @@ bool DataResponse102::deserialize(const unsigned char* data, size_t len, std::ve
     out_retrans_data.clear();
     size_t offset = 0;
     if (!header.deserialize(data, offset, len)) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "DataResponse102: Header parsing failed.");
+        LOG_ERROR << "DataResponse102: Header parsing failed.";
         return false;
     }
     if (header.msg_type != MESSAGE_TYPE) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "DataResponse102: Type mismatch.");
+        LOG_ERROR << "DataResponse102: Type mismatch.";
         return false;
     }
 
     // header.msg_size = (HeaderPartForMsgSize(14) + FixedPayloadPart(9) + VariableDataPartLength)
     uint16_t base_msg_size_content = (RetransmissionMsgHeader::SIZE - sizeof(uint16_t)) + DATA_RESPONSE_102_FIXED_PAYLOAD_SIZE;
     if (header.msg_size < base_msg_size_content) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "DataResponse102: msg_size in header too small for fixed part. Expected at least " + std::to_string(base_msg_size_content) + ", Got: " + std::to_string(header.msg_size));
+        LOG_ERROR << "DataResponse102: msg_size in header too small for fixed part. Expected at least " << base_msg_size_content << ", Got: " << header.msg_size;
         return false;
     }
 
@@ -591,13 +590,13 @@ bool DataResponse102::deserialize(const unsigned char* data, size_t len, std::ve
     size_t expected_full_msg_len = sizeof(uint16_t) + header.msg_size + RetransmissionMsgFooter::SIZE;
 
     if (len < expected_full_msg_len) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "DataResponse102: Overall length too short for declared msg_size. Expected: " + std::to_string(expected_full_msg_len) + ", Got: " + std::to_string(len));
+        LOG_ERROR << "DataResponse102: Overall length too short for declared msg_size. Expected: " << expected_full_msg_len << ", Got: " << len;
         return false;
     }
 
     // Fixed Payload
     if (offset + DATA_RESPONSE_102_FIXED_PAYLOAD_SIZE > len) { // Check if enough data for fixed payload
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "DataResponse102: Not enough data for fixed payload.");
+        LOG_ERROR << "DataResponse102: Not enough data for fixed payload.";
         return false;
     }
     memcpy(&channel_id, data + offset, sizeof(channel_id));
@@ -616,7 +615,7 @@ bool DataResponse102::deserialize(const unsigned char* data, size_t len, std::ve
 
     // Variable Payload (retransmitted_data)
     if (offset + variable_data_len > len) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "DataResponse102: Not enough data for variable payload part (retransmitted_data).");
+        LOG_ERROR << "DataResponse102: Not enough data for variable payload part (retransmitted_data).";
         return false;
     }
     if (variable_data_len > 0) {
@@ -626,7 +625,7 @@ bool DataResponse102::deserialize(const unsigned char* data, size_t len, std::ve
 
     // Footer (Checksum validation)
     if (!footer.deserialize(data, offset, len, data, sizeof(uint16_t) + header.msg_size)) {
-        CoreUtils::Logger::Log(CoreUtils::LogLevel::ERROR, "DataResponse102: Footer checksum validation failed.");
+        LOG_ERROR << "DataResponse102: Footer checksum validation failed.";
         return false;
     }
 
