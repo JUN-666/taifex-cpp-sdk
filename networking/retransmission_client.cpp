@@ -11,6 +11,9 @@
 #include <cerrno>   // For errno
 #include <chrono>   // For sleep, system_clock
 
+#include "common_header.h"     // For parsing retransmitted market data headers
+#include "message_identifier.h"// For identifying market data message types if needed
+
 namespace Networking {
 
 // Default connect and read/write timeouts (can be made configurable)
@@ -267,12 +270,6 @@ void RetransmissionClient::stop() {
     logged_in_ = false;
     LOG_INFO << "RetransmissionClient: Stopped.";
 }
-
-#include "common_header.h"     // For parsing retransmitted market data headers
-#include "message_identifier.h"// For identifying market data message types if needed
-
-
-namespace Networking {
 
 // ... (constructor, destructor, connect_to_server, perform_login, send_tcp_message, start, stop, receive_loop) ...
 
