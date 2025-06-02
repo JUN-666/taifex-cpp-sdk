@@ -40,7 +40,8 @@ bool parse_i081_body(const unsigned char* body_data,
     // 2. PROD-MSG-SEQ: 9(10), Length 5
     const size_t PROD_MSG_SEQ_BCD_LEN = 5;
     const size_t PROD_MSG_SEQ_DIGITS = 10;
-    std::string pms_str = bcdBytesToAsciiStringHelper(body_data + offset, PROD_MSG_SEQ_BCD_LEN, PROD_MSG_SEQ_DIGITS);
+    std::span<const unsigned char> pms_span(body_data + offset, PROD_MSG_SEQ_BCD_LEN);
+    std::string pms_str = bcdBytesToAsciiStringHelper(std::as_bytes(pms_span), PROD_MSG_SEQ_DIGITS);
     if (pms_str.empty() && PROD_MSG_SEQ_DIGITS > 0) { return false; }
     try {
         out_msg.prod_msg_seq = std::stoul(pms_str); // Max 4,294,967,295 fits in uint32_t
@@ -50,7 +51,8 @@ bool parse_i081_body(const unsigned char* body_data,
     // 3. NO-MD-ENTRIES: 9(2), Length 1
     const size_t NO_MD_ENTRIES_BCD_LEN = 1;
     const size_t NO_MD_ENTRIES_DIGITS = 2;
-    std::string nme_str = bcdBytesToAsciiStringHelper(body_data + offset, NO_MD_ENTRIES_BCD_LEN, NO_MD_ENTRIES_DIGITS);
+    std::span<const unsigned char> nme_span(body_data + offset, NO_MD_ENTRIES_BCD_LEN);
+    std::string nme_str = bcdBytesToAsciiStringHelper(std::as_bytes(nme_span), NO_MD_ENTRIES_DIGITS);
     if (nme_str.empty() && NO_MD_ENTRIES_DIGITS > 0) { return false; }
     try {
         out_msg.no_md_entries = static_cast<uint8_t>(std::stoul(nme_str));
@@ -88,7 +90,8 @@ bool parse_i081_body(const unsigned char* body_data,
         // MD-ENTRY-PX: 9(9), Length 5
         const size_t MD_ENTRY_PX_BCD_LEN = 5;
         const size_t MD_ENTRY_PX_DIGITS = 9;
-        std::string px_str = bcdBytesToAsciiStringHelper(body_data + offset, MD_ENTRY_PX_BCD_LEN, MD_ENTRY_PX_DIGITS);
+        std::span<const unsigned char> px_span(body_data + offset, MD_ENTRY_PX_BCD_LEN);
+        std::string px_str = bcdBytesToAsciiStringHelper(std::as_bytes(px_span), MD_ENTRY_PX_DIGITS);
         if (px_str.empty() && MD_ENTRY_PX_DIGITS > 0) { return false; }
         try {
             entry.md_entry_px = std::stoll(px_str);
@@ -98,7 +101,8 @@ bool parse_i081_body(const unsigned char* body_data,
         // MD-ENTRY-SIZE: 9(8), Length 4
         const size_t MD_ENTRY_SIZE_BCD_LEN = 4;
         const size_t MD_ENTRY_SIZE_DIGITS = 8;
-        std::string size_str = bcdBytesToAsciiStringHelper(body_data + offset, MD_ENTRY_SIZE_BCD_LEN, MD_ENTRY_SIZE_DIGITS);
+        std::span<const unsigned char> size_span(body_data + offset, MD_ENTRY_SIZE_BCD_LEN);
+        std::string size_str = bcdBytesToAsciiStringHelper(std::as_bytes(size_span), MD_ENTRY_SIZE_DIGITS);
         if (size_str.empty() && MD_ENTRY_SIZE_DIGITS > 0) { return false; }
         try {
             entry.md_entry_size = std::stoll(size_str);
@@ -108,7 +112,8 @@ bool parse_i081_body(const unsigned char* body_data,
         // MD-PRICE-LEVEL: 9(2), Length 1
         const size_t MD_PRICE_LEVEL_BCD_LEN = 1;
         const size_t MD_PRICE_LEVEL_DIGITS = 2;
-        std::string level_str = bcdBytesToAsciiStringHelper(body_data + offset, MD_PRICE_LEVEL_BCD_LEN, MD_PRICE_LEVEL_DIGITS);
+        std::span<const unsigned char> level_span(body_data + offset, MD_PRICE_LEVEL_BCD_LEN);
+        std::string level_str = bcdBytesToAsciiStringHelper(std::as_bytes(level_span), MD_PRICE_LEVEL_DIGITS);
         if (level_str.empty() && MD_PRICE_LEVEL_DIGITS > 0) { return false; }
         try {
             entry.md_price_level = static_cast<uint8_t>(std::stoul(level_str));

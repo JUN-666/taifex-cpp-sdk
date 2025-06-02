@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <span>      // For std::span
+#include <cstddef>   // For std::byte
 
 namespace TaifexRetransmission {
 
@@ -237,11 +239,10 @@ uint8_t calculate_check_code(uint16_t mult_op, const std::string& password_str);
  * @brief Calculates the checksum for TAIFEX retransmission protocol messages.
  * The checksum is the sum of bytes from the 'MsgSize' field (inclusive) up to
  * the byte immediately preceding the 'CheckSum' field, modulo 256.
- * @param data Pointer to the start of the data range for checksum calculation (i.e., start of MsgSize field).
- * @param length The length of the data range.
+ * @param data_segment A std::span representing the data segment for checksum calculation.
  * @return The calculated 8-bit checksum.
  */
-uint8_t calculate_retransmission_checksum(const unsigned char* data, size_t length);
+uint8_t calculate_retransmission_checksum(std::span<const std::byte> data_segment);
 
 } // namespace TaifexRetransmission
 #endif // RETRANSMISSION_PROTOCOL_H

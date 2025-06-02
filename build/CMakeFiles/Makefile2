@@ -64,6 +64,10 @@ CMAKE_BINARY_DIR = /app/build
 
 # The main recursive "all" target.
 all: CMakeFiles/core_utils.dir/all
+all: CMakeFiles/specific_message_parsers.dir/all
+all: CMakeFiles/order_book_lib.dir/all
+all: CMakeFiles/taifex_networking_lib.dir/all
+all: CMakeFiles/taifex_sdk_lib.dir/all
 all: CMakeFiles/pack_bcd_tester.dir/all
 all: CMakeFiles/checksum_tester.dir/all
 all: CMakeFiles/string_utils_tester.dir/all
@@ -71,6 +75,14 @@ all: CMakeFiles/logger_tester.dir/all
 all: CMakeFiles/error_codes_tester.dir/all
 all: CMakeFiles/common_header_parser_tester.dir/all
 all: CMakeFiles/message_identifier_tester.dir/all
+all: CMakeFiles/test_message_i010.dir/all
+all: CMakeFiles/test_message_i081.dir/all
+all: CMakeFiles/test_message_i083.dir/all
+all: CMakeFiles/test_message_i001.dir/all
+all: CMakeFiles/test_message_i002.dir/all
+all: CMakeFiles/test_order_book.dir/all
+all: CMakeFiles/test_taifex_sdk.dir/all
+all: CMakeFiles/pcap_replay_example.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -79,6 +91,10 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/core_utils.dir/clean
+clean: CMakeFiles/specific_message_parsers.dir/clean
+clean: CMakeFiles/order_book_lib.dir/clean
+clean: CMakeFiles/taifex_networking_lib.dir/clean
+clean: CMakeFiles/taifex_sdk_lib.dir/clean
 clean: CMakeFiles/pack_bcd_tester.dir/clean
 clean: CMakeFiles/checksum_tester.dir/clean
 clean: CMakeFiles/string_utils_tester.dir/clean
@@ -86,6 +102,14 @@ clean: CMakeFiles/logger_tester.dir/clean
 clean: CMakeFiles/error_codes_tester.dir/clean
 clean: CMakeFiles/common_header_parser_tester.dir/clean
 clean: CMakeFiles/message_identifier_tester.dir/clean
+clean: CMakeFiles/test_message_i010.dir/clean
+clean: CMakeFiles/test_message_i081.dir/clean
+clean: CMakeFiles/test_message_i083.dir/clean
+clean: CMakeFiles/test_message_i001.dir/clean
+clean: CMakeFiles/test_message_i002.dir/clean
+clean: CMakeFiles/test_order_book.dir/clean
+clean: CMakeFiles/test_taifex_sdk.dir/clean
+clean: CMakeFiles/pcap_replay_example.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -115,13 +139,121 @@ CMakeFiles/core_utils.dir/clean:
 .PHONY : CMakeFiles/core_utils.dir/clean
 
 #=============================================================================
+# Target rules for target CMakeFiles/specific_message_parsers.dir
+
+# All Build rule for target.
+CMakeFiles/specific_message_parsers.dir/all: CMakeFiles/core_utils.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=25,26,27,28,29,30,31 "Built target specific_message_parsers"
+.PHONY : CMakeFiles/specific_message_parsers.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/specific_message_parsers.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 14
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/specific_message_parsers.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/specific_message_parsers.dir/rule
+
+# Convenience name for target.
+specific_message_parsers: CMakeFiles/specific_message_parsers.dir/rule
+.PHONY : specific_message_parsers
+
+# clean rule for target.
+CMakeFiles/specific_message_parsers.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/specific_message_parsers.dir/build.make CMakeFiles/specific_message_parsers.dir/clean
+.PHONY : CMakeFiles/specific_message_parsers.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/order_book_lib.dir
+
+# All Build rule for target.
+CMakeFiles/order_book_lib.dir/all: CMakeFiles/core_utils.dir/all
+CMakeFiles/order_book_lib.dir/all: CMakeFiles/specific_message_parsers.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/order_book_lib.dir/build.make CMakeFiles/order_book_lib.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/order_book_lib.dir/build.make CMakeFiles/order_book_lib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=18,19 "Built target order_book_lib"
+.PHONY : CMakeFiles/order_book_lib.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/order_book_lib.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/order_book_lib.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/order_book_lib.dir/rule
+
+# Convenience name for target.
+order_book_lib: CMakeFiles/order_book_lib.dir/rule
+.PHONY : order_book_lib
+
+# clean rule for target.
+CMakeFiles/order_book_lib.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/order_book_lib.dir/build.make CMakeFiles/order_book_lib.dir/clean
+.PHONY : CMakeFiles/order_book_lib.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/taifex_networking_lib.dir
+
+# All Build rule for target.
+CMakeFiles/taifex_networking_lib.dir/all: CMakeFiles/core_utils.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=34,35,36,37,38 "Built target taifex_networking_lib"
+.PHONY : CMakeFiles/taifex_networking_lib.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/taifex_networking_lib.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 12
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/taifex_networking_lib.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/taifex_networking_lib.dir/rule
+
+# Convenience name for target.
+taifex_networking_lib: CMakeFiles/taifex_networking_lib.dir/rule
+.PHONY : taifex_networking_lib
+
+# clean rule for target.
+CMakeFiles/taifex_networking_lib.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_networking_lib.dir/build.make CMakeFiles/taifex_networking_lib.dir/clean
+.PHONY : CMakeFiles/taifex_networking_lib.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/taifex_sdk_lib.dir
+
+# All Build rule for target.
+CMakeFiles/taifex_sdk_lib.dir/all: CMakeFiles/core_utils.dir/all
+CMakeFiles/taifex_sdk_lib.dir/all: CMakeFiles/specific_message_parsers.dir/all
+CMakeFiles/taifex_sdk_lib.dir/all: CMakeFiles/order_book_lib.dir/all
+CMakeFiles/taifex_sdk_lib.dir/all: CMakeFiles/taifex_networking_lib.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_sdk_lib.dir/build.make CMakeFiles/taifex_sdk_lib.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_sdk_lib.dir/build.make CMakeFiles/taifex_sdk_lib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=39,40 "Built target taifex_sdk_lib"
+.PHONY : CMakeFiles/taifex_sdk_lib.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/taifex_sdk_lib.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 23
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/taifex_sdk_lib.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/taifex_sdk_lib.dir/rule
+
+# Convenience name for target.
+taifex_sdk_lib: CMakeFiles/taifex_sdk_lib.dir/rule
+.PHONY : taifex_sdk_lib
+
+# clean rule for target.
+CMakeFiles/taifex_sdk_lib.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taifex_sdk_lib.dir/build.make CMakeFiles/taifex_sdk_lib.dir/clean
+.PHONY : CMakeFiles/taifex_sdk_lib.dir/clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/pack_bcd_tester.dir
 
 # All Build rule for target.
 CMakeFiles/pack_bcd_tester.dir/all: CMakeFiles/core_utils.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pack_bcd_tester.dir/build.make CMakeFiles/pack_bcd_tester.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pack_bcd_tester.dir/build.make CMakeFiles/pack_bcd_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=18,19 "Built target pack_bcd_tester"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=20,21 "Built target pack_bcd_tester"
 .PHONY : CMakeFiles/pack_bcd_tester.dir/all
 
 # Build rule for subdir invocation for target.
@@ -173,7 +305,7 @@ CMakeFiles/checksum_tester.dir/clean:
 CMakeFiles/string_utils_tester.dir/all: CMakeFiles/core_utils.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/string_utils_tester.dir/build.make CMakeFiles/string_utils_tester.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/string_utils_tester.dir/build.make CMakeFiles/string_utils_tester.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=20,21 "Built target string_utils_tester"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=32,33 "Built target string_utils_tester"
 .PHONY : CMakeFiles/string_utils_tester.dir/all
 
 # Build rule for subdir invocation for target.
@@ -295,6 +427,229 @@ message_identifier_tester: CMakeFiles/message_identifier_tester.dir/rule
 CMakeFiles/message_identifier_tester.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/message_identifier_tester.dir/build.make CMakeFiles/message_identifier_tester.dir/clean
 .PHONY : CMakeFiles/message_identifier_tester.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_message_i010.dir
+
+# All Build rule for target.
+CMakeFiles/test_message_i010.dir/all: CMakeFiles/core_utils.dir/all
+CMakeFiles/test_message_i010.dir/all: CMakeFiles/specific_message_parsers.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i010.dir/build.make CMakeFiles/test_message_i010.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i010.dir/build.make CMakeFiles/test_message_i010.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=45,46 "Built target test_message_i010"
+.PHONY : CMakeFiles/test_message_i010.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_message_i010.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_message_i010.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/test_message_i010.dir/rule
+
+# Convenience name for target.
+test_message_i010: CMakeFiles/test_message_i010.dir/rule
+.PHONY : test_message_i010
+
+# clean rule for target.
+CMakeFiles/test_message_i010.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i010.dir/build.make CMakeFiles/test_message_i010.dir/clean
+.PHONY : CMakeFiles/test_message_i010.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_message_i081.dir
+
+# All Build rule for target.
+CMakeFiles/test_message_i081.dir/all: CMakeFiles/core_utils.dir/all
+CMakeFiles/test_message_i081.dir/all: CMakeFiles/specific_message_parsers.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i081.dir/build.make CMakeFiles/test_message_i081.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i081.dir/build.make CMakeFiles/test_message_i081.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=47,48 "Built target test_message_i081"
+.PHONY : CMakeFiles/test_message_i081.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_message_i081.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_message_i081.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/test_message_i081.dir/rule
+
+# Convenience name for target.
+test_message_i081: CMakeFiles/test_message_i081.dir/rule
+.PHONY : test_message_i081
+
+# clean rule for target.
+CMakeFiles/test_message_i081.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i081.dir/build.make CMakeFiles/test_message_i081.dir/clean
+.PHONY : CMakeFiles/test_message_i081.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_message_i083.dir
+
+# All Build rule for target.
+CMakeFiles/test_message_i083.dir/all: CMakeFiles/core_utils.dir/all
+CMakeFiles/test_message_i083.dir/all: CMakeFiles/specific_message_parsers.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i083.dir/build.make CMakeFiles/test_message_i083.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i083.dir/build.make CMakeFiles/test_message_i083.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=49,50 "Built target test_message_i083"
+.PHONY : CMakeFiles/test_message_i083.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_message_i083.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_message_i083.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/test_message_i083.dir/rule
+
+# Convenience name for target.
+test_message_i083: CMakeFiles/test_message_i083.dir/rule
+.PHONY : test_message_i083
+
+# clean rule for target.
+CMakeFiles/test_message_i083.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i083.dir/build.make CMakeFiles/test_message_i083.dir/clean
+.PHONY : CMakeFiles/test_message_i083.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_message_i001.dir
+
+# All Build rule for target.
+CMakeFiles/test_message_i001.dir/all: CMakeFiles/core_utils.dir/all
+CMakeFiles/test_message_i001.dir/all: CMakeFiles/specific_message_parsers.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i001.dir/build.make CMakeFiles/test_message_i001.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i001.dir/build.make CMakeFiles/test_message_i001.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=41,42 "Built target test_message_i001"
+.PHONY : CMakeFiles/test_message_i001.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_message_i001.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_message_i001.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/test_message_i001.dir/rule
+
+# Convenience name for target.
+test_message_i001: CMakeFiles/test_message_i001.dir/rule
+.PHONY : test_message_i001
+
+# clean rule for target.
+CMakeFiles/test_message_i001.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i001.dir/build.make CMakeFiles/test_message_i001.dir/clean
+.PHONY : CMakeFiles/test_message_i001.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_message_i002.dir
+
+# All Build rule for target.
+CMakeFiles/test_message_i002.dir/all: CMakeFiles/core_utils.dir/all
+CMakeFiles/test_message_i002.dir/all: CMakeFiles/specific_message_parsers.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i002.dir/build.make CMakeFiles/test_message_i002.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i002.dir/build.make CMakeFiles/test_message_i002.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=43,44 "Built target test_message_i002"
+.PHONY : CMakeFiles/test_message_i002.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_message_i002.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_message_i002.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/test_message_i002.dir/rule
+
+# Convenience name for target.
+test_message_i002: CMakeFiles/test_message_i002.dir/rule
+.PHONY : test_message_i002
+
+# clean rule for target.
+CMakeFiles/test_message_i002.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_message_i002.dir/build.make CMakeFiles/test_message_i002.dir/clean
+.PHONY : CMakeFiles/test_message_i002.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_order_book.dir
+
+# All Build rule for target.
+CMakeFiles/test_order_book.dir/all: CMakeFiles/core_utils.dir/all
+CMakeFiles/test_order_book.dir/all: CMakeFiles/specific_message_parsers.dir/all
+CMakeFiles/test_order_book.dir/all: CMakeFiles/order_book_lib.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_order_book.dir/build.make CMakeFiles/test_order_book.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_order_book.dir/build.make CMakeFiles/test_order_book.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=51,52 "Built target test_order_book"
+.PHONY : CMakeFiles/test_order_book.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_order_book.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 18
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_order_book.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/test_order_book.dir/rule
+
+# Convenience name for target.
+test_order_book: CMakeFiles/test_order_book.dir/rule
+.PHONY : test_order_book
+
+# clean rule for target.
+CMakeFiles/test_order_book.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_order_book.dir/build.make CMakeFiles/test_order_book.dir/clean
+.PHONY : CMakeFiles/test_order_book.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_taifex_sdk.dir
+
+# All Build rule for target.
+CMakeFiles/test_taifex_sdk.dir/all: CMakeFiles/core_utils.dir/all
+CMakeFiles/test_taifex_sdk.dir/all: CMakeFiles/specific_message_parsers.dir/all
+CMakeFiles/test_taifex_sdk.dir/all: CMakeFiles/order_book_lib.dir/all
+CMakeFiles/test_taifex_sdk.dir/all: CMakeFiles/taifex_networking_lib.dir/all
+CMakeFiles/test_taifex_sdk.dir/all: CMakeFiles/taifex_sdk_lib.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_taifex_sdk.dir/build.make CMakeFiles/test_taifex_sdk.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_taifex_sdk.dir/build.make CMakeFiles/test_taifex_sdk.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=53,54 "Built target test_taifex_sdk"
+.PHONY : CMakeFiles/test_taifex_sdk.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_taifex_sdk.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 25
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_taifex_sdk.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/test_taifex_sdk.dir/rule
+
+# Convenience name for target.
+test_taifex_sdk: CMakeFiles/test_taifex_sdk.dir/rule
+.PHONY : test_taifex_sdk
+
+# clean rule for target.
+CMakeFiles/test_taifex_sdk.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_taifex_sdk.dir/build.make CMakeFiles/test_taifex_sdk.dir/clean
+.PHONY : CMakeFiles/test_taifex_sdk.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/pcap_replay_example.dir
+
+# All Build rule for target.
+CMakeFiles/pcap_replay_example.dir/all: CMakeFiles/core_utils.dir/all
+CMakeFiles/pcap_replay_example.dir/all: CMakeFiles/specific_message_parsers.dir/all
+CMakeFiles/pcap_replay_example.dir/all: CMakeFiles/order_book_lib.dir/all
+CMakeFiles/pcap_replay_example.dir/all: CMakeFiles/taifex_networking_lib.dir/all
+CMakeFiles/pcap_replay_example.dir/all: CMakeFiles/taifex_sdk_lib.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pcap_replay_example.dir/build.make CMakeFiles/pcap_replay_example.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pcap_replay_example.dir/build.make CMakeFiles/pcap_replay_example.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/app/build/CMakeFiles --progress-num=22,23,24 "Built target pcap_replay_example"
+.PHONY : CMakeFiles/pcap_replay_example.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/pcap_replay_example.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 26
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/pcap_replay_example.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /app/build/CMakeFiles 0
+.PHONY : CMakeFiles/pcap_replay_example.dir/rule
+
+# Convenience name for target.
+pcap_replay_example: CMakeFiles/pcap_replay_example.dir/rule
+.PHONY : pcap_replay_example
+
+# clean rule for target.
+CMakeFiles/pcap_replay_example.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pcap_replay_example.dir/build.make CMakeFiles/pcap_replay_example.dir/clean
+.PHONY : CMakeFiles/pcap_replay_example.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -74,8 +74,8 @@ CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
 //Flags used by the linker during RELWITHDEBINFO builds.
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
-//Enable/Disable output of compile commands during generation.
-CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
+//No help, variable specified on the command line.
+CMAKE_EXPORT_COMPILE_COMMANDS:UNINITIALIZED=ON
 
 //Value Computed by CMake.
 CMAKE_FIND_PACKAGE_REDIRECTS_DIR:STATIC=/app/build/CMakeFiles/pkgRedirects
@@ -125,7 +125,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=CoreUtils
+CMAKE_PROJECT_NAME:STATIC=MessageProcessingSDK
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -218,6 +218,27 @@ CoreUtils_Test_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 CoreUtils_Test_SOURCE_DIR:STATIC=/app
+
+//Value Computed by CMake
+MessageProcessingSDK_BINARY_DIR:STATIC=/app/build
+
+//Value Computed by CMake
+MessageProcessingSDK_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+MessageProcessingSDK_SOURCE_DIR:STATIC=/app
+
+//Dependencies for the target
+order_book_lib_LIB_DEPENDS:STATIC=general;specific_message_parsers;
+
+//Dependencies for the target
+specific_message_parsers_LIB_DEPENDS:STATIC=general;core_utils;
+
+//Dependencies for the target
+taifex_networking_lib_LIB_DEPENDS:STATIC=general;core_utils;
+
+//Dependencies for the target
+taifex_sdk_lib_LIB_DEPENDS:STATIC=general;order_book_lib;general;taifex_networking_lib;
 
 
 ########################
